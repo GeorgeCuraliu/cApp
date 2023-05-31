@@ -1,0 +1,127 @@
+.auth-container{
+    width: 100vw;
+    height: 100vh;
+    background-color:blue;
+    display: grid;
+    place-items: center;
+    section{
+        min-width: 450px;
+        min-height: 600px;
+        background-color: #E2EBF0;;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-shadow: rgba(10, 20, 3, 0.4) 10px 10px;
+
+        @media (max-height: 650px){
+            height: 90%;
+            min-height: auto;
+        }
+        @media (max-width: 500){
+            width: 90%;
+            min-width: auto;
+        }
+
+        .google-container{
+            width: 100%;
+            height: 120px;
+            background-color: #E2EBF0;;
+            margin-top: auto;
+            display: grid;
+            place-items: center;
+
+            div{
+                width: 50%;
+                height: 24%;
+                background-color: gray;
+                display: grid;
+                place-items: center;
+                font-size: larger;
+                border: 2px solid black;
+                border-radius: 20px;
+                cursor: pointer;
+                font-weight: 600;
+            }
+        }
+
+        form{
+            width: 280px;
+            height: 480px;
+            background-color: #E2EBF0;
+            display: flex;
+            flex-direction: column;
+            input{
+                background-color: #B9CCD7;
+                width: 100%;
+                height: 40px;
+                padding: 0;
+                margin: 0.8vh;
+                border: 0;
+                &:invalid{
+                    border: 2px red;
+                }
+            }
+
+            .confirm{
+                all: unset;
+                place-self: center;
+                color: green;
+                cursor: pointer;
+                font-weight: 700;
+                font-size: larger;
+            }
+
+            .changeAuthBtn{
+                margin-top: auto;
+                width: 70%;
+                aspect-ratio: 4/1;
+                background: radial-gradient(circle at 64.61% 18.68%, #d294e0 0, #bf86de 16.67%, #a979db 33.33%, #8f6cd8 50%, #7060d5 66.67%, #4657d3 83.33%, #0050d1 100%);
+                place-self: center;
+                border-radius: 1vw;
+                cursor: pointer;
+                position: relative;
+
+                &:hover {
+                    animation: confirm 5s alternate 1;
+                }
+
+                
+            }
+            .logo-container{
+                width: 70%;
+                aspect-ratio: 1 / 1;
+                place-self: center;
+                .logo{
+                    width: 100%;
+                    height: 100%;
+                    background-size: cover;
+                    background-position: center;
+                    background-color: #E2EBF0;
+                }
+            }
+            p{
+                place-self: center;
+                color: red;
+                font-weight: 600;
+                font-size: large;
+                height: 20px;
+                margin: 0;
+                border: 2px;
+                padding: 0;
+            }
+        }
+    }
+}
+
+
+@keyframes confirm {
+    0%{
+        filter: hue-rotate(279deg);
+    }
+    50%{
+        filter: hue-rotate(197deg);
+    }
+    100%{
+        filter: hue-rotate(12deg);
+    }
+}
