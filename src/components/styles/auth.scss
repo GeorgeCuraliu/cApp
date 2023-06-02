@@ -82,7 +82,7 @@
                 position: relative;
 
                 &:hover {
-                    animation: confirm 5s alternate 1;
+                    animation: confirm 1s alternate infinite;
                 }
 
                 
@@ -103,8 +103,10 @@
                 place-self: center;
                 color: red;
                 font-weight: 600;
-                font-size: large;
-                height: 20px;
+                font-size:medium;
+                min-height: 20px;
+                height: fit-content;
+                width: 120%;
                 margin: 0;
                 border: 2px;
                 padding: 0;

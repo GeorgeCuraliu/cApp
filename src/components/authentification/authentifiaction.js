@@ -1,11 +1,12 @@
-import React from "react";
-import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { React, useState }from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import "../styles/auth.css";
 import { ReactComponent as Logo } from "../img/mb9-logo.svg";
 import axios from 'axios';
+
 const AuthentificationPage = () => {
   const { type } = useParams();
+  const navigate = useNavigate();
 
   let [authType, setAuthType] = useState(type);
   let [createAccData, setCreateAccData] = useState({userName:"", password:"", password0:""});
@@ -16,6 +17,7 @@ const AuthentificationPage = () => {
   const handleBtnClick = (currentType) => {
     setAuthType(currentType);
   };
+
 
   const logInDataChange = (e) => {//will change log in data
     const {name, value} = e.target;
@@ -37,7 +39,6 @@ const AuthentificationPage = () => {
 
   const sendNewAcc = async (e) => {
     e.preventDefault();
-
     if(createAccData.userName && createAccData.password && createAccData.password0){//checks if the data exits
         console.log(`New account data detected ${createAccData.userName},  ${createAccData.password}, ${createAccData.password0}`);
         if(createAccData.userName.length < 3){setDataErrorNewAcc("USER NAME TOO SHORT"); return undefined}//checks all the conditions so the data is valid for a new account
@@ -47,19 +48,21 @@ const AuthentificationPage = () => {
 
         axios.post("http://localhost:3001/addAcc", createAccData)//addAcc rouute will be used to craete an account with the sent information, after it was verified
         .then(response => {
-          console.log(response.data);
+          console.log(response.data[1]);
+          if(response.data[0] !== 0){setDataErrorNewAcc(response.data[1]);}//updating the error if the data was accepted and processed
+          else{//redirect to the chat page and set a cookie for authentification
+            document.cookie = `user=${createAccData.userName} ${createAccData.password}`;
+            navigate('/chat-page');
+          }
         })
         .catch(error => {
           console.error(error);
         });
-
     }else{
       setDataErrorNewAcc("SOME DATA IS MISSING");
       return undefined;
     }
     setDataErrorNewAcc(null);//if everything is alright it should reach here and reset the value
-
-
   }
 
   const sendLogInData = (e) => {
@@ -81,8 +84,8 @@ const AuthentificationPage = () => {
               placeholder="USER NAME" 
               value={logInData.userName}
               onChange={logInDataChange}
-              min={"3"}
-              max={"10"}/>
+              min={3}
+              max={10}/>
             <input 
               type="password" 
               placeholder="PASSWORD" 
@@ -106,19 +109,23 @@ const AuthentificationPage = () => {
               placeholder="USER NAME" 
               name="userName"
               onChange={createAccDataChange}
-              value={createAccData.userName}/>
+              value={createAccData.userName}
+              min={3}
+              max={15}/>
             <input 
               type="password" 
               placeholder="PASSWORD" 
               name="password"
               onChange={createAccDataChange}
-              value={createAccData.password}/>
+              value={createAccData.password}
+              min={4}/>
             <input 
               type="password" 
               placeholder="CONFIRM THE PASSWORD"
               name="password0"
               onChange={createAccDataChange}
-              value={createAccData.password0}/>
+              value={createAccData.password0}
+              min={4}/>
             {dataErrorNewAcc && <p>{dataErrorNewAcc}</p>}
             <button type="confirm" className="confirm">Confirm</button>
             <button className="changeAuthBtn" onClick={() => handleBtnClick("logIn")}>
