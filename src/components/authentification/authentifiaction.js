@@ -5,6 +5,20 @@ import { ReactComponent as Logo } from "../img/mb9-logo.svg";
 import axios from 'axios';
 
 const AuthentificationPage = () => {
+  //in case the app finds a cookie with log in data, it will try to verify the data and send the user to /chat-page url
+  if(document.cookie){
+    console.log(document.cookie + "  --cookie data found")
+    let credentials = document.cookie.split("=")[1].split(" ");//will get the value and after that will take the name and password as separate values
+    console.log(credentials[0]+ " "+ credentials[1] + "  credntials found");
+    credentials[1] =credentials[1].replace(";", "");
+
+    axios.post("http://localhost:3001/logIn", {userName: credentials[0], password: credentials[1]})//will verify the retrieved data
+        .then(response => {
+          console.log(`${response.data} validity of credentials`)
+            response.data ? navigate('/chat-page') : console.log("The cookie data is invalid")
+        })
+  }
+
   const { type } = useParams();
   const navigate = useNavigate();
 
@@ -68,6 +82,18 @@ const AuthentificationPage = () => {
   const sendLogInData = (e) => {
     e.preventDefault();
 
+    if(logInData.userName && logInData.password){
+      axios.post("http://localhost:3001/logIn", logInData)
+        .then(response => {
+          console.log(`${response.data} validity of credentials`)
+          if(response.data){
+            document.cookie = `user=${logInData.userName} ${logInData.password}`;
+            navigate('/chat-page');
+          }else{setDataErrorLogIn("Invalid credentials")}
+        })
+    }else{
+      setDataErrorLogIn("Some data is missing");
+    }
   }
 
   return (

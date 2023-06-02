@@ -66,6 +66,26 @@ app.post('/addAcc', async (req, res) => {
 
 
 
+app.post(`/logIn`, (req, res) => {//will handle log in
+  fs.readFile("src/data/MB9DATA.json", (err, jsonData) => {
+    if (err) {
+      return res.status(500).send("Error reading file");
+    }
+
+    let data = JSON.parse(jsonData);
+    let users = data.users;
+
+    for (let user in users) {
+      if (user === req.body.userName && users[user][0] === req.body.password) {
+        return res.send(true);
+      }
+    }
+    return res.send(false);
+  });
+});
+
+
+
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
