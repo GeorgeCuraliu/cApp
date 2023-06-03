@@ -19,7 +19,10 @@ app.post('/addAcc', async (req, res) => {
   // the template object for the user
   const userData = {
     "userName": req.body.userName,
-    "password": req.body.password
+    "password": req.body.password,
+    "friends" : [],//for this 3 i should use bothe the name and the appCode
+    "sentFriendRequest": [],
+    "receivedFriendRequest": []
   };
 
 

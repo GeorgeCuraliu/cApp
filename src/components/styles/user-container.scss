@@ -1,0 +1,56 @@
+@mixin buttonsStyle{
+    width: 40%;
+    place-self: center;
+    aspect-ratio: 1;
+    background-color: black;
+}
+@mixin imgStyle{
+    width: 100%;
+    align-self: center;
+    cursor: pointer;
+}
+
+*, ::after, ::before{
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+
+.userContainer{
+    width: 15vw;
+    height: 100vh;
+    background-color: blue;
+    display: flex;
+    flex-direction: column;
+
+    .users{
+        width: 96%;
+        flex: 1 0 auto;
+        background-color: aqua;
+        place-self: center;
+    }
+
+    .buttonContainer{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+
+        .friendRequests{
+            @include buttonsStyle();
+            height: auto;
+            display: flex;
+            img{
+                @include imgStyle();
+            }
+        }
+
+        .settingsDiv{
+            margin-top: auto;
+            @include buttonsStyle();
+            img{
+                @include imgStyle();
+            }
+        }
+
+    }
+}
