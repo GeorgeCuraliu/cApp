@@ -20,9 +20,10 @@ app.post('/addAcc', async (req, res) => {
   const userData = {
     "userName": req.body.userName,
     "password": req.body.password,
-    "friends" : [],//for this 3 i should use bothe the name and the appCode
-    "sentFriendRequest": [],
-    "receivedFriendRequest": []
+    "userImage": false,
+    "friends" : {},//for this 3 i should use both the name and the appCode
+    "sentFriendRequest": {},
+    "receivedFriendRequest": {}
   };
 
 
@@ -90,5 +91,5 @@ app.post(`/logIn`, (req, res) => {//will handle log in
 
 
 app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+  console.log(`authentification port is open on on http://localhost:${port}`);
 });
