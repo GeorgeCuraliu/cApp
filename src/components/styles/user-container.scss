@@ -23,17 +23,66 @@
     display: flex;
     flex-direction: column;
 
-    .users{
+    .user-showcase{
+        place-self: center;
+        width: 80%;
+        aspect-ratio: 3/1;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+
+        img{
+            height: 80%;
+            aspect-ratio: 1/1;
+            background-color: black;
+        }
+
+        p{
+            font-size: 3vh;
+            color: palegreen;
+        }
+    }
+
+    .users {
         width: 96%;
         flex: 1 0 auto;
         background-color: aqua;
         place-self: center;
+        display: flex;
+        justify-content: flex-start;
+        gap: 1vh;
+        flex-direction: column;
+        align-items: center;
+        overflow-y: scroll;
+      
+        .friendCard {
+          width: 90%;
+          background-color: red;
+          display: flex;
+          align-items: center;
+          flex-direction: row;
+          gap: 10px;
+          height: 5vh;
+
+          img{
+            height: 90%;
+            aspect-ratio: 1/1;
+            background-color: black;
+          }
+        }
+    }
+
+    .users::-webkit-scrollbar {
+        width: 0;
+        background: transparent;
     }
 
     .buttonContainer{
         display: flex;
         flex-direction: row;
         justify-content: space-around;
+        align-self: flex-end;
 
         .friendRequests{
             @include buttonsStyle();

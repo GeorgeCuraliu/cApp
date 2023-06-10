@@ -1,15 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import axios from "axios";
+import { Context } from "../context/context";
 
 const UserCard = (props) => {
 
+    let {name, code} = useContext(Context);
+
     const sendFriendRequest = () => {
         
-        //retrieve the name of the user who is sendig the invite from cookie
-        const currUserName = document.cookie.split("=")[1].split(" ")[0];
-        console.log(`sending friend request to -- ${props.code} -- from -- ${currUserName} `)
+        //retrieve the name and code of the user who is sendig the invite from context
+        console.log(`sending friend request to -- ${props.code} -- from -- ${name} `)
 
-        axios.post("http://localhost:3002/send", { sender: currUserName, receiver: [props.userName, props.code] })//route to send a request
+        axios.post("http://localhost:3002/send", { sender: [name, code], receiver: [props.userName, props.code] })//route to send a request
         .then(response => {
             console.log(response)
         })
@@ -20,7 +22,7 @@ const UserCard = (props) => {
 
     return (
         <div className="userCard" onClick={sendFriendRequest}>
-            <img />
+            <img alt="22"/>
             <p>{props.userName}</p>
         </div>
     )

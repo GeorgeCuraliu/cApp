@@ -1,10 +1,14 @@
-import { React, useState }from "react";
+import { React, useContext, useState }from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "../styles/auth.css";
 import { ReactComponent as Logo } from "../img/mb9-logo.svg";
 import axios from 'axios';
+import { Context } from "../context/context";
 
 const AuthentificationPage = () => {
+
+  let {setName, setCode} = useContext(Context);
+
   //in case the app finds a cookie with log in data, it will try to verify the data and send the user to /chat-page url
   if(document.cookie){
     console.log(document.cookie + "  --cookie data found")
@@ -15,7 +19,13 @@ const AuthentificationPage = () => {
     axios.post("http://localhost:3001/logIn", {userName: credentials[0], password: credentials[1]})//will verify the retrieved data
         .then(response => {
           console.log(`${response.data} validity of credentials`)
-            response.data ? navigate('/chat-page') : console.log("The cookie data is invalid")
+            if(response.data[0]){
+              setName(credentials[0])
+              setCode(response.data[1])
+              navigate('/chat-page')
+            }else{
+              console.log("The cookie data is invalid")
+            }
         })
   }
 
@@ -50,7 +60,6 @@ const AuthentificationPage = () => {
   }
   console.log(`${dataErrorNewAcc} -- current error`)
 
-
   const sendNewAcc = async (e) => {
     e.preventDefault();
     if(createAccData.userName && createAccData.password && createAccData.password0){//checks if the data exits
@@ -63,9 +72,13 @@ const AuthentificationPage = () => {
         axios.post("http://localhost:3001/addAcc", createAccData)//addAcc rouute will be used to craete an account with the sent information, after it was verified
         .then(response => {
           console.log(response.data[1]);
-          if(response.data[0] !== 0){setDataErrorNewAcc(response.data[1]);}//updating the error if the data was accepted and processed
+          if(response.data[0] !== 0){
+            setDataErrorNewAcc(response.data[1]);
+            setCode(response.data[2])
+            setName(createAccData.userName);
+          }//updating the error if the data was accepted and processed
           else{//redirect to the chat page and set a cookie for authentification
-            document.cookie = `user=${createAccData.userName} ${createAccData.password}`;
+            document.cookie = `user=${createAccData.userName} ${createAccData.password}; SameSite=Strict; Domain=localhost; Path=/http://localhost:${window.location.port}`;
             navigate('/chat-page');
           }
         })
@@ -86,7 +99,9 @@ const AuthentificationPage = () => {
       axios.post("http://localhost:3001/logIn", logInData)
         .then(response => {
           console.log(`${response.data} validity of credentials`)
-          if(response.data){
+          if(response.data[0]){
+            setName(logInData.userName);
+            setCode(response.data[1])
             document.cookie = `user=${logInData.userName} ${logInData.password}`;
             navigate('/chat-page');
           }else{setDataErrorLogIn("Invalid credentials")}

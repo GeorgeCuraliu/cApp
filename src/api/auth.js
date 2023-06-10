@@ -1,5 +1,3 @@
-//https://ro.jooble.org/desc/-4029074834890132952?ckey=internship-web-developer&rgn=8733&pos=4&elckey=-506711421853024733&p=1&sid=4087418186405391502&jobAge=306&relb=115&brelb=115&bscr=29397.022204632623&scr=29397.022204632623&searchTestGroup=1_2_1&iid=2586823936861905699
-
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
@@ -26,8 +24,6 @@ app.post('/addAcc', async (req, res) => {
     "receivedFriendRequest": {}
   };
 
-
-
   //acces the app data and get the user order number
   fs.readFile('src/data/MB9DATA.json', 'utf8', (err, data) => {
     if (err) {
@@ -38,7 +34,7 @@ app.post('/addAcc', async (req, res) => {
     const jsonData = JSON.parse(data);
 
     for(let user in jsonData.users){//will assure that the sername is free
-      if(user == req.body.userName){return res.send([978, "The user name is already used, please choose another one"]);}
+      if(user === req.body.userName){return res.send([978, "The user name is already used, please choose another one"]);}
     }
 
     jsonData.users[req.body.userName] = [req.body.password, jsonData.currentUserOrder];//add the user info to the user data in server data(just name, password and code);
@@ -62,7 +58,7 @@ app.post('/addAcc', async (req, res) => {
           return res.send(812, ["A server error occurred while updating the app data, please try again later"]);
         }
 
-        res.send([0, `Data for new account received successfully`]); // send() === return 
+        res.send([0, `Data for new account received successfully`, number]); // send() === return 
       });
     });
   });
@@ -81,15 +77,15 @@ app.post(`/logIn`, (req, res) => {//will handle log in
 
     for (let user in users) {
       if (user === req.body.userName && users[user][0] === req.body.password) {
-        return res.send(true);
+        return res.send([true, users[user][1]]);
       }
     }
-    return res.send(false);
+    return res.send([false]);
   });
 });
 
 
 
 app.listen(port, () => {
-  console.log(`authentification port is open on on http://localhost:${port}`);
+  console.log(`authentification port is open on on http://localhost:${port} --- process ID -- ${process.pid}`);
 });

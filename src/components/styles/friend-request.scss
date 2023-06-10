@@ -127,6 +127,58 @@
                 margin-left: 10%;
                 height: 100%;
                 overflow-y: scroll;
+
+                .receivedRequestCard{
+                    width: 80%;
+                    height: 14vh;
+                    background-color: aquamarine;
+                    margin-left: 5%;
+                    margin-top: 1vh;
+                    display: flex;
+                    justify-content: space-between;
+
+                    .userInfo{
+                        display: flex;
+                        flex-direction: row;
+                        height: 100%;
+                        align-items: center;
+                        margin-left: 2vh;
+                        
+                        .userImage{
+                            height: 80%;
+                            background-color: black;
+                            aspect-ratio: 1/1;
+                            margin-right: 2vh;
+                        }
+                        
+                        p{
+                            font-size: 8vh;
+                        }
+                    }
+
+                    .responseContainer{
+                        display: flex;
+                        flex-direction: row;
+                        position: relative;
+                        right: 10%;
+                        align-items: center;
+
+                        .response{
+                            height: 65%;
+                            aspect-ratio: 1/1;
+                            margin: 5%;
+                            cursor: pointer;
+                        }
+
+                        .accept{
+                            background-color: green;
+                        }
+
+                        .decline{
+                            background-color: red;
+                        }
+                    }
+                }
             }
         }
     }
