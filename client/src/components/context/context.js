@@ -44,7 +44,7 @@ const ContextProvider = ({children}) => {
 
     useEffect(() => {
         
-        console.log("Saving data for sessionStorage");
+        console.log(`Saving data for sessionStorage for user ${code}`);
 
         const contextValues = JSON.stringify({
             name,

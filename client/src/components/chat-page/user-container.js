@@ -24,7 +24,7 @@ const UserContainer = (props) => {
                 console.log(response.data);
                 setFriends(response.data);
             } catch (error) {
-                console.log("some critical expexted error happened :(")
+                console.log("some critical expected error happened :(")
                 console.log(error);
             }
             }

@@ -646,46 +646,66 @@ fs.readFile(`data/chats/${req.body.chatCode}.json`, (err, JSONdata) => {
 
 
 
-app.post("/createServer", (req, res) => {//{body.serverName, body.description, body.owner[name, code]}
+app.post("/createServer", (req, res) => {
+  console.log("Creating a server");
 
-  fs.readFile("data/MB9DATA.json", (err, jsonData) => {//get the server code
-    if(err){return res.send("Error reading app data")}
+  fs.readFile("data/MB9DATA.json", (err, jsonData) => {
+    if (err) {
+      return res.send("Error reading app data");
+    }
 
-    const serverCode = JSON.parse(jsonData).currentServerNumber;
+    let dataApp = JSON.parse(jsonData);
+    dataApp.currentServerNumber += 1;
+    const serverCode = dataApp.currentServerNumber;
 
     const serverData = {
       name: req.body.serverName,
       description: req.body.description,
       owner: [...req.body.owner],
       users: {},
-      channels: {}//the channels obj shoudl look something like this: users: {}, name:"", description:""
-    }
+      channels: {}
+    };
 
-    fs.writeFile(`data/servers/${serverCode}.json`, JSON.stringify(serverData), err => {
-      if(err){
-        return res.send("Error creating save data for this server")
-      }else{
-        //will add the created server as owned by the user who is sending the request
-    fs.readFile(`data/users/${req.body.owner[1]}.json`, (err, jsonData) => {
+    fs.writeFile("data/MB9DATA.json", JSON.stringify(dataApp), (err) => {
+      if (err) {
+        return res.send("Could not write application data");
+      }
 
-      if(err){ return res.send("Error accesing user data");}
+      fs.writeFile(`data/servers/${serverCode}.json`, JSON.stringify(serverData), (err) => {
+        if (err) {
+          return res.send("Error creating save data for this server");
+        } else {
+          fs.readFile(`data/users/${req.body.owner[1]}.json`, (err, jsonData) => {
+            if (err) {
+              return res.send("Error accessing user data");
+            }
 
-      let data = JSON.parse(jsonData);
-      data.ownServers[serverCode] = req.body.serverName;
-      data.memberInServers[serverCode] = req.body.serverName;
+            let data = JSON.parse(jsonData);
+            data.ownServers[serverCode] = req.body.serverName;
+            data.memberInServers[serverCode] = req.body.serverName;
 
-      fs.writeFile(`data/users/${req.body.owner[1]}.json`, JSON.stringify(data), (err) => {
-        if(err){
-          return res.send("Couldnt write the user data")
-        }else{
-          return res.send("Server created succesfully");
+            fs.writeFile(`data/users/${req.body.owner[1]}.json`, JSON.stringify(data), (err) => {
+              if (err) {
+                return res.send("Could not write the user data");
+              } else {
+                console.log(`This server will have code ${serverCode}`);
+                return res.send("Server created successfully");
+              }
+            });
+          });
         }
-      })
-    })
-  }
-  }
-  )}
-  )})
+      });
+    });
+  });
+});
+
+
+
+
+
+
+
+
   
     
 
