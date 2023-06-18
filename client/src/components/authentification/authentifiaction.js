@@ -1,4 +1,4 @@
-import { React, useContext, useState }from "react";
+import { React, useContext, useState, useEffect }from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "../styles/auth.css";
 import { ReactComponent as Logo } from "../img/mb9-logo.svg";
@@ -9,7 +9,8 @@ const AuthentificationPage = () => {
 
   let {setName, setCode} = useContext(Context);
 
-  //in case the app finds a cookie with log in data, it will try to verify the data and send the user to /chat-page url
+  useEffect(() => {
+    //in case the app finds a cookie with log in data, it will try to verify the data and send the user to /chat-page url
   if(document.cookie){
     console.log(document.cookie + "  --cookie data found")
     let credentials = document.cookie.split("=")[1].split(" ");//will get the value and after that will take the name and password as separate values
@@ -28,6 +29,7 @@ const AuthentificationPage = () => {
             }
         })
   }
+  })
 
   const { type } = useParams();
   const navigate = useNavigate();

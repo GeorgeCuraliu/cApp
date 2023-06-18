@@ -4,6 +4,7 @@ import { useState } from "react";
 import axios from "axios";
 import { Context } from "../context/context";
 import { useContext } from "react";
+import ServerContainer from "./serversContainer";
 
 const ServerOptions = () => {
 
@@ -51,6 +52,7 @@ const ServerOptions = () => {
                 </div>
                 <button onClick={createServer} className="confirmNewServer">Create</button>
             </header>
+            <ServerContainer />
         </div>
     )
 }

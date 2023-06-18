@@ -1,0 +1,29 @@
+{
+  "name": "awdawd",
+  "description": "awdsssasdaw",
+  "owner": [
+    "MrBlec",
+    14243
+  ],
+  "users": {},
+  "channels": {
+    "testChannel": {
+      "users": {},
+      "acces": "private",
+      "messageAcces": "public",
+      "messages": {}
+    },
+    "testChannel1": {
+      "users": {},
+      "acces": "public",
+      "messageAcces": "public",
+      "messages": {}
+    },
+    "testChannel2": {
+      "users": {},
+      "acces": "private",
+      "messageAcces": "private",
+      "messages": {}
+    }
+  }
+}

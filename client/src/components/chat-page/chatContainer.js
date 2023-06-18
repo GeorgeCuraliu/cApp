@@ -8,7 +8,6 @@ import MessageContainer from "./messageContainer";
 const ChatContainer = () => {
   let { activeUserChatData, name, code } = useContext(Context);
   const [message, setMessage] = useState("");
-  const [lastIndex, setLastIndex] = useState();
   const [messages, setMessages] = useState([]);
   const [messagesLoaded, setMessagesLoaded] = useState(false);
 
@@ -36,7 +35,7 @@ const ChatContainer = () => {
   console.log(messages);
   console.log(`${lastIndexRef.current} -> [${lastIndexRef.current - 9}, ${lastIndexRef.current}] -- the future messages request index`);
 
-  const handleScroll = () => {
+  const handleScroll = () => {//will alwaws check if it needs to request more messages(if the scoll reach the top of container)
     if (isScrolledToTop()) {
       console.log(`Requesting new messages ${lastIndexRef.current}`);
       axios.post("http://localhost:3009/getMessages", {
@@ -50,9 +49,7 @@ const ChatContainer = () => {
             }
 
             console.log(response);
-            setLastIndex(response.data.lastIndex);
             const lastIndex = response.data.lastIndex;
-            setLastIndex(lastIndex);
             lastIndexRef.current = lastIndex;
             for (let i = 0; i < response.data.messages.length; i++) {
                 setMessages((prevMessages) => [
@@ -65,18 +62,18 @@ const ChatContainer = () => {
     }
   };
 
-  const isScrolledToTop = () => {
+  const isScrolledToTop = () => {//checks if the top of container is touched
     const messageContainer = messageContainerRef.current;
     return messageContainer.scrollTop === 0;
   };
 
-  const scrollDown = () => {
+  const scrollDown = () => {//is used to automaticaly scroll down when the chat messages are loaded
     console.log("scrolling down");
     const messageContainer = messageContainerRef.current;
     messageContainer.scrollTop = messageContainer.scrollHeight;
   };
 
-  useEffect(() => {
+  useEffect(() => {//will request the first messages
     console.log("requesting messages")
     axios
       .post("http://localhost:3009/getMessages", {
@@ -85,7 +82,6 @@ const ChatContainer = () => {
       .then((response) => {
         console.log(response);
         const lastIndex = response.data.lastIndex;
-        setLastIndex(lastIndex);
         lastIndexRef.current = lastIndex;
         for (let i = 0; i < response.data.messages.length; i++) {
           setMessages((prevMessages) => [

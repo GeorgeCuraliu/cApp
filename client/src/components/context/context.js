@@ -23,14 +23,15 @@ const ContextProvider = ({children}) => {
         serverChatOpen,
         setServerChatOpen,
         activeUserChatData,
-        setActiveUserChatData
+        setActiveUserChatData,
     }
 
     useEffect(() => {
 
-        console.log("Context loaded");
+        console.log(`Context loaded with the code of ${code} and username ${name}`);
 
         const savedContextValues = sessionStorage.getItem("contextValues");
+
         if (savedContextValues) {
             const parsedValues = JSON.parse(savedContextValues);
             setName(parsedValues.name);
@@ -39,6 +40,8 @@ const ContextProvider = ({children}) => {
             setUserChatOpen(parsedValues.userChatOpen);
             setServerChatOpen(parsedValues.serverChatOpen);
             setActiveUserChatData(parsedValues.activeUserChatData);
+        }else{
+            console.log("No local storage found")
         }
     }, [])
 
