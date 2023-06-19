@@ -106,9 +106,12 @@ const ServerContainer = () => {
                             })}
 
                          </div>
-                         <div className="channelOptions">
+                            {activeChannel &&  
+                                <div className="channelOptions">
+                                    <div className="channelOptionContainer">
 
-                         </div>
+                                    </div>   
+                                </div>}
                     </div>)}
             </section>
         </div>
