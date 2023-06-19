@@ -23,8 +23,8 @@ const FriendRequestPage = (props) => {
                     </section>
                     <div onClick={props.handleFriendPage}>Close the window</div>
                 </header>
-                {page == "sent" && <SendPage />}
-                {page == "received" && <ReceivedPage />}
+                {page === "sent" && <SendPage />}
+                {page === "received" && <ReceivedPage />}
             </div>
         </div>
     )

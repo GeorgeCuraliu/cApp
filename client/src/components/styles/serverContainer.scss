@@ -92,6 +92,8 @@
                     display: flex;
                     flex-direction: row;
                     height: 8vh;
+                    width: 58vw;
+                    margin-left: auto;
                     justify-content: space-between;
                     position: relative;
 
@@ -122,8 +124,10 @@
             }
 
             .channels{
+                position: absolute;
+                top: 0;
                 width: 10vw;
-                height: calc(100% - 8vh);
+                height: 100%;
                 background-color: grey;
 
                 .channel{
@@ -141,10 +145,32 @@
                 bottom: 0;
                 right: 0;
 
-                .channelOptionContainer{
+                .channelOptionHeader{
                     width: 58vw;
                     height: 10vh;
                     background-color: azure;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    align-items: center;
+
+                    p{
+                        margin-left: 10px;
+                    }
+
+                    .channelPrivacyOptions{
+                        background-color: chocolate;
+                        height: 100%;
+                        margin-right: 10px;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-around;
+
+                        div{
+                            display: flex;
+                            flex-direction: row;
+                        }
+                    }
                 }
             }
         }

@@ -24,14 +24,14 @@ const ChatPage = () => {
     }
 
     const handleFriendPage = () => {//this will cahnge the viibilit of friend page
-      console.log("loaded the chat")
+        console.log("loaded the chat")
         setFriendPageDisplay((value) => !value)
     }
 
 
     return(
         <div style={styleContainer}>
-            <UserContainer  />
+            <UserContainer  handleFriendPage = {handleFriendPage}/>
             <ServerContainer />
             {friendPageDisplay && <FriendRequestPage  handleFriendPage = {handleFriendPage}/>}
             {userChatOpen && <ChatContainer key={activeUserChatData.name} />}

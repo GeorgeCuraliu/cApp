@@ -678,6 +678,31 @@ app.post("/getOwnedServers", (req, res) => {//req.body.user[name, code]
 
 })
 
+app.post("/createChannel", (req, res) => {//req.body.code (the code of server) req.body.channel[name, privacy(public/private -- for view), messagePrivacy(if any user can send an message)]
+  console.log(`creating a channel for server ${req.body.code}`)
+
+  fs.readFile(`data/servers/${req.body.code}.json`, (err, jsonData) => {
+    if(err){return res.send("Couldnt acces the server data")}
+
+    const channel = {//creating the obj for the channel, that will be inside the server data
+      users:{},//creating an user object in case the owner changes the acces to private, so he have to invite users
+      acces:req.body.channel[1],
+      messageAcces:req.body.channel[2],
+      messages:{}
+    }
+
+    let data = JSON.parse(jsonData);
+
+    data.channels[req.body.channel[0]] = channel;
+
+    fs.writeFile(`data/servers/${req.body.code}.json`, JSON.stringify(data), err => {
+      if(err){return res.send("Couldnt write the file, i say its user fault, never the developer")}
+      return res.send("New channel created")
+    })
+  })
+
+})
+
 
 app.post("/getChannels", (req, res) => {//req.body.code(server code) req.body.user(so the endpoint will know the accesibility of suer and will select what to return)
   console.log(`Requesting channels for the server ${req.body.code}`);
@@ -700,27 +725,25 @@ app.post("/getChannels", (req, res) => {//req.body.code(server code) req.body.us
 
 })
 
-app.post("/createChannel", (req, res) => {//req.body.code (the code of server) req.body.channel[name, privacy(public/private -- for view), messagePrivacy(if any user can send an message)]
-  console.log(`creating a channel for server ${req.body.code}`)
+app.post("/getChannelInfo", (req, res) => {//req.body.server = serverCode         req.body.channel = channelName    req.body.getMessages = true/false (will decide if the endpont will return messages too)
+  console.log(`Getting channel info for the channel ${req.body.channel} from the server ${req.body.server}`);
 
   fs.readFile(`data/servers/${req.body.code}.json`, (err, jsonData) => {
-    if(err){return res.send("Couldnt acces the server data")}
+    if(err){ return res.send("Server occured an error when accesed the server data")}
 
-    const channel = {//creating the obj for the channel, that will be inside the server data
-      users:{},//creating an user object in case the owner changes the acces to private, so he have to invite users
-      acces:req.body.channel[1],
-      messageAcces:req.body.channel[2],
-      messages:{}
+    let channels = JSON.parse(jsonData).channels;
+    let channel = {};
+
+    if(req.body.getMessages){//will add some messages to the return object
+
     }
 
-    let data = JSON.parse(jsonData);
+    channel.users = channels.users;
+    channel.acces = channel.acces;
+    channel.messageAcces = channels.messageAcces;
 
-    data.channels[req.body.channel[0]] = channel;
+    return res.send(channel);
 
-    fs.writeFile(`data/servers/${req.body.code}.json`, JSON.stringify(data), err => {
-      if(err){return res.send("Couldnt write the file, i say its user fault, never the developer")}
-      return res.send("New channel created")
-    })
   })
 
 })

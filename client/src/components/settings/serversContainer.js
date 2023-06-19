@@ -43,11 +43,6 @@ const ServerContainer = () => {
     }, [activeServer])
 
 
-    const handleClickOnServer = (code) => {
-        console.log(`setting for the server ${code} have been triggered`)
-        setActiveServer(code);
-    }
-
     const sendNewChannelData = () => {
         console.log(messageAccesNewChannel, newChannelPrivacy, newChannelName)
 
@@ -64,7 +59,7 @@ const ServerContainer = () => {
         <div className="serverDetailedOptionsContainer">
             <section className="servers">
                 {servers && Object.entries(servers).map((server, index) => {
-                    return(<p key={index} onClick={() => {handleClickOnServer(server[0])}}>{server[1]}</p>)
+                    return(<p key={index} onClick={() => {setActiveServer(server[0])}}>{server[1]}</p>)
                 })}
             </section>
             <section className="options">
@@ -108,7 +103,18 @@ const ServerContainer = () => {
                          </div>
                             {activeChannel &&  
                                 <div className="channelOptions">
-                                    <div className="channelOptionContainer">
+                                    <div className="channelOptionHeader">
+                                        <p>{activeChannel.channelName}</p>
+                                        <div className="channelPrivacyOptions">
+                                            <div>
+                                                <input type={"checkbox"}/>
+                                                <p>Privacy</p>
+                                            </div>
+                                            <div>
+                                                <input type={"checkbox"}/>
+                                                <p>Anyone can send messages</p>
+                                            </div>
+                                        </div>
 
                                     </div>   
                                 </div>}

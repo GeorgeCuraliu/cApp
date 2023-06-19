@@ -11,7 +11,7 @@ const UserContainer = (props) => {
 
     const navigate = useNavigate();
 
-    const {name, code, setUserChatOpen} = useContext(Context);
+    const {name, code } = useContext(Context);
     let [friends, setFriends] = useState({});
 
     useEffect(() => {
@@ -36,9 +36,9 @@ const UserContainer = (props) => {
         }
     }, [name, code])
 
-    const activateUserChat = () => {
+    const activateFriendRequests = () => {
         console.log("loading user chat")
-        setUserChatOpen(true);
+        props.handleFriendPage();
     }
 
 
@@ -64,7 +64,7 @@ const UserContainer = (props) => {
             
 
             <div className="buttonContainer">
-                <div onClick={activateUserChat} className="friendRequests">{/**this will add the div that will trigger the friend request manager window*/}
+                <div onClick={activateFriendRequests} className="friendRequests">{/**this will add the div that will trigger the friend request manager window*/}
                     <img src={AddUserLogo} alt="AddUserLogo"/>
                 </div>
                 <div onClick={loadSettings} className="settingsDiv">{/**will load a completely new page, based on a new url, for server, user, app settings*/}
