@@ -704,6 +704,7 @@ app.post("/createChannel", (req, res) => {//req.body.code (the code of server) r
 })
 
 
+
 app.post("/getChannels", (req, res) => {//req.body.code(server code) req.body.user(so the endpoint will know the accesibility of suer and will select what to return)
   console.log(`Requesting channels for the server ${req.body.code}`);
 
@@ -716,33 +717,50 @@ app.post("/getChannels", (req, res) => {//req.body.code(server code) req.body.us
     if(data.owner[0] === req.body.user){//will return all the the channels if the owner is accesing the endpoint
 
       Object.entries(data.channels).map(([key, value]) => {
-        response[key] = {acces: value.acces, messageAcces: value.messageAcces}
+        response[key] = {acces: value.acces, messageAcces: value.messageAcces, users: value.users}
       })
 
-      return res.send(response);
+      return res.send({channels: response, mainChannel: data.mainChannel});
     }
   })
 
 })
 
-app.post("/getChannelInfo", (req, res) => {//req.body.server = serverCode         req.body.channel = channelName    req.body.getMessages = true/false (will decide if the endpont will return messages too)
-  console.log(`Getting channel info for the channel ${req.body.channel} from the server ${req.body.server}`);
+app.post("/changeChannelPrivacySettings", (req,res) => {//req.body.serverCode   req.body.setting  req.body.channelName 
 
-  fs.readFile(`data/servers/${req.body.code}.json`, (err, jsonData) => {
-    if(err){ return res.send("Server occured an error when accesed the server data")}
+  fs.readFile(`data/servers/${req.body.serverCode}.json`, (err, jsonData) => {
+    if(err){return res.send("Couldnt acces the server data")}
 
-    let channels = JSON.parse(jsonData).channels;
-    let channel = {};
+    let data = JSON.parse(jsonData);
+    data.channels[req.body.channelName][req.body.setting] === "public" ? data.channels[req.body.channelName][req.body.setting] = "private" : data.channels[req.body.channelName][req.body.setting] = "public";
 
-    if(req.body.getMessages){//will add some messages to the return object
+    fs.writeFile(`data/servers/${req.body.serverCode}.json`, JSON.stringify(data), ( err ) => {
+      if(err){return res.send("Couldnt write the server data")}
 
-    }
+      return res.send("The change was succesfuly saved");
 
-    channel.users = channels.users;
-    channel.acces = channel.acces;
-    channel.messageAcces = channels.messageAcces;
+    })
 
-    return res.send(channel);
+  })
+
+})
+
+
+app.post("/changeMainChannel", (req, res) => {//req.body.serverCode    req.body.channelName
+
+  console.log(`Changing server main channel to ${req.body.channelName}`)
+
+  fs.readFile(`data/servers/${req.body.serverCode}.json`, (err, jsonData) => {
+    if(err){return res.send("Couldnt acces server data")}
+
+    let data = JSON.parse(jsonData);
+    data.mainChannel = req.body.channelName
+
+    fs.writeFile(`data/servers/${req.body.serverCode}.json`, JSON.stringify(data), err => {
+      if(err){return res.send("Couldnt write the new data, its the user`s fault")}
+
+      return res.send(`Main channel changed succesfully to ${data.mainChannel}`)
+    })
 
   })
 
@@ -792,8 +810,10 @@ app.post("/createServer", (req, res) => {
       name: req.body.serverName,
       description: req.body.description,
       owner: [...req.body.owner],
+      joinRequests:{},
       users: {},
-      channels: {}
+      channels: {},
+      mainChannel : ""
     };
 
     fs.writeFile("data/MB9DATA.json", JSON.stringify(dataApp), (err) => {
@@ -828,6 +848,56 @@ app.post("/createServer", (req, res) => {
     });
   });
 });
+
+
+
+app.post("/getServerBasicInfo", (req, res) => { //this endpoint will return some basic info about the server for a possible join request
+
+  fs.readFile(`data/servers/${req.body.code}.json`, (err, jsonData) => {
+    if(err){return res.status(204)}
+
+    let data = JSON.parse(jsonData);
+    let basicInfo = {};
+    basicInfo.serverName = data.name;
+    basicInfo.serverCode = req.body.code;
+
+    return res.status(200).send(basicInfo);
+    
+  })
+})
+
+app.post("/sendServerJoinRequest", (req, res) => {//req.body.serverCode  req.body.sender[code, name]
+
+  fs.readFile(`data/servers/${req.body.serverCode}.json`, (err, jsonData) => {
+    if(err){return res.status(404)}
+
+    let data = JSON.parse(jsonData);
+    data.joinRequests[req.body.sender[1]] = req.body.sender[0];
+
+    fs.writeFile(`data/servers/${req.body.serverCode}.json`, JSON.stringify(data), err => {
+      if(err){return res.status(404)}
+      return res.status(200).send();
+    })
+  })
+
+})
+
+
+app.post("/getGlobalServerSettings", (req, res) => {//req.body.serverCode 
+  
+  fs.readFile(`data/servers/${req.body.serverCode}.json`, (err, jsonData) => {
+    if(err){return res.status(404)}
+
+    let data = JSON.parse(jsonData);
+    let globalSettings = {//will contain just data about global settings
+      joinRequests : data.joinRequests
+    };
+    console.log(data.joinRequests);
+    
+    return res.status(200).send(globalSettings);
+
+  })
+})
 
 
 

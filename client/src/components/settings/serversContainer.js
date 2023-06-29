@@ -2,17 +2,20 @@ import "../styles/settings/serverOptions.css";
 import { useContext, useState, useEffect } from "react";
 import { Context } from "../context/context";
 import axios from "axios";
+import ChannelSettings from "./channelSettings";
+import GlobalSettings from "./globalServerSettings";
 
 const ServerContainer = () => {
 
     const {name, code} = useContext(Context)
     const [servers, setServers] =useState();
     const [activeServer, setActiveServer] = useState();
-    const [messageAccesNewChannel, setMessageAccesNewChannel] = useState("private");
-    const [newChannelPrivacy, setNewChannelPrivacy] = useState("public");
-    const [newChannelName, setNewChannelName] = useState("");
     const [channels, setChannels] = useState();
-    const [activeChannel, setActiveChannel] = useState();
+    const [activeChannel, setActiveChannel] = useState();//will have the active server`s code
+    const [mainChannel, setMainChannel] = useState();
+    const [globalSettings, setGlobalSettings] = useState(false);//will control the dislay of global settings
+
+    console.log(activeChannel)
 
     useEffect(() => {
         console.log("getting servers info")
@@ -35,7 +38,8 @@ const ServerContainer = () => {
             axios.post("http://localhost:3009/getChannels", {code: activeServer, user: name})
             .then(response => {
                 console.log(response);
-                setChannels(response.data)
+                setChannels(response.data.channels)
+                setMainChannel(response.data.mainChannel)
             })
 
         }
@@ -43,15 +47,47 @@ const ServerContainer = () => {
     }, [activeServer])
 
 
-    const sendNewChannelData = () => {
-        console.log(messageAccesNewChannel, newChannelPrivacy, newChannelName)
+    const changeChannelPrivacySettings = (setting) => {//will get the name from activeChannel and will just reverse the value
 
-        if(newChannelName){
-            axios.post("http://localhost:3009/createChannel", {code : activeServer, channel :[newChannelName, newChannelPrivacy, messageAccesNewChannel]})
-            .then(response => {
-                console.log(response)
-            })
-        }
+        axios.post("http://localhost:3009/changeChannelPrivacySettings", {serverCode: activeServer, channelName: activeChannel.channelName, setting: setting})
+        .then(response => {
+            console.log(response)
+
+            let tempObj = {...activeChannel}
+
+            //first change the value in the states, so it the chnage will be visible
+            tempObj[setting] === "public" ? tempObj[setting] = "private" : tempObj[setting] = "public" ;
+            console.log(`Changing the value of ${setting} setting to ${activeChannel[setting]}`)
+            setActiveChannel(tempObj);
+
+            tempObj = {...channels}
+            tempObj[activeChannel.channelName][setting] === "public" ? tempObj[activeChannel.channelName][setting] = "private" : tempObj[activeChannel.channelName][setting] = "public";
+            setChannels(tempObj)
+        })
+
+    }
+
+    const changeMainChannel = () => {//will cahneg the local value of mainChannel, after it changes it to the server and gets the response
+        console.log("changing main server")
+
+        axios.post("http://localhost:3009/changeMainChannel", {serverCode: activeServer, channelName: activeChannel.channelName})
+        .then(response => {
+            console.log(response);
+            setMainChannel(activeChannel.channelName)
+
+        })
+
+
+    }
+
+    const triggerChannelOptions = (vals) => {
+        setActiveChannel({...vals});
+        setGlobalSettings(false)
+    }
+
+    const triggerGlobalSettings = () => {
+        setGlobalSettings((val) => !val);
+        setActiveChannel();
     }
     
 
@@ -65,60 +101,30 @@ const ServerContainer = () => {
             <section className="options">
                 {activeServer && (
                     <div className="optionsContainer">
-
-                        <div className="createChannel">
-                            <div className="channelNameContainer">
-                                <input 
-                                    placeholder="Channel name" 
-                                    type={"text"}
-                                    value={newChannelName}
-                                    onChange={(e) => {setNewChannelName(e.target.value);}}/>
-                            </div>
-                            <div>
-                                <input 
-                                    type={"checkbox"} 
-                                    onChange={(e) => {if (e.target.checked){setNewChannelPrivacy("private")} else {setNewChannelPrivacy("public")}}}/>
-                                <p>Private</p>
-                            </div>
-                            <div>
-                                <input 
-                                    type={"checkbox"} 
-                                    onChange={(e) => {if (e.target.checked){setMessageAccesNewChannel("public")} else {setMessageAccesNewChannel("private")}}}/>
-                                <p>Anyone can send messages</p>
-                            </div>
-                            <button onClick={sendNewChannelData} className="confirmChannel">Create a channel</button>
-                        </div>
-
+                        {globalSettings && <GlobalSettings activeServer={activeServer} />}
                         <div className="channels">
+                            <p className="globalSettings" onClick={triggerGlobalSettings}>Global settings</p>
+                            <p className="channelsSectionName">Channels</p>
+
                             {channels && Object.entries(channels).map(([key, value]) => {
                                 return(
                                     <p 
                                         key={key} 
                                         className="channel"
-                                        onClick={() => {setActiveChannel({channelName: key, acces: value.acces, messageAcces: value.messageAcces})}}>
-                                        {key}
+                                        onClick={() => {triggerChannelOptions({channelName: key, acces: value.acces, messageAcces: value.messageAcces, users: value.users, mainChannel: value.mainChannel})}}>
+                                    {key}
                                     </p>)
                             })}
 
                          </div>
                             {activeChannel &&  
-                                <div className="channelOptions">
-                                    <div className="channelOptionHeader">
-                                        <p>{activeChannel.channelName}</p>
-                                        <div className="channelPrivacyOptions">
-                                            <div>
-                                                <input type={"checkbox"}/>
-                                                <p>Privacy</p>
-                                            </div>
-                                            <div>
-                                                <input type={"checkbox"}/>
-                                                <p>Anyone can send messages</p>
-                                            </div>
-                                        </div>
-
-                                    </div>   
-                                </div>}
-                    </div>)}
+                                <ChannelSettings 
+                                    activeChannel={activeChannel} 
+                                    mainChannel={mainChannel} 
+                                    changeMainChannel={changeMainChannel} 
+                                    changeChannelPrivacySettings={changeChannelPrivacySettings}/>}
+                     </div>)}
+                    
             </section>
         </div>
     )
@@ -126,3 +132,9 @@ const ServerContainer = () => {
 }
 
 export default ServerContainer;
+
+
+
+
+
+

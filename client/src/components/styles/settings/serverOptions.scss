@@ -3,38 +3,114 @@
     height: 100vh;
     background-color: darkblue;
 
-    .serverOptionsHeader{
-        width: 100%;
-        height: 20vh;
-        background-color: aqua;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
+    .options{
+        width: 80%;
+        height: 80vh;
+        background-color: cornflowerblue;
 
-        p{
-            font-size: 4vh;
-            margin-left: 1vh;
-            margin-top: 1vh;
-        }
-
-        .createServerOptions{
+        .optionsContainer{
             width: 100%;
-            flex: 1;
-            display: flex;
+            height: 100%;
+            position: relative;
 
-            .inputDataContainer{
-                margin-left: 1vw;
-                display: flex;
-                flex-direction: column;
-                width: 30%;
-                gap: 2vh;
+            .createChannel{
+                    background-color: blanchedalmond; 
+                    display: flex;
+                    flex-direction: row;
+                    height: 8vh;
+                    width: 58vw;
+                    margin-left: auto;
+                    justify-content: space-between;
+                    position: relative;
+
+                    .confirmChannel{
+                        position: absolute;
+                        right: 90px;
+                        bottom: 5px;
+                        background-color: darkblue;
+                        color: pink;
+                        cursor: pointer;
+                    }
+
+                    .channelNameContainer{
+                        align-items: center;
+
+                        input{
+                            height: 2vh;
+                            font-size: 2vh;
+                        }
+                    }
+
+                    div{
+                        margin-left: 14px;
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                    }
+            }
+
+            .channels{
+                position: absolute;
+                top: 0;
+                width: 10vw;
+                height: 100%;
+                background-color: grey;
+
+                .globalSettings{
+                    color: darkorchid;
+                    cursor: pointer;
+                    margin-bottom: 15px;
+                }
+
+                .channel{
+                    cursor: pointer;
+                    margin-bottom: 6px;
+                }
+            }
+
+            .channelOptions{
+                width: 58vw;
+                height: 72vh;
+                background-color: goldenrod;
+                align-self: flex-end;
+                position: absolute;
+                bottom: 0;
+                right: 0;
+
+                .channelOptionHeader{
+                    width: 58vw;
+                    height: 10vh;
+                    background-color: azure;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    align-items: center;
+
+                    p{
+                        margin-left: 10px;
+                    }
+
+                    button{
+                        cursor: pointer;
+                        background-color:darkolivegreen;
+                        color: black;
+                    }
+
+                    .channelPrivacyOptions{
+                        background-color: chocolate;
+                        height: 100%;
+                        margin-right: 10px;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-around;
+
+                        div{
+                            display: flex;
+                            flex-direction: row;
+                        }
+                    }
+                }
             }
         }
-
-        .confirmNewServer{
-            cursor: pointer;
-            place-self: center;
-        }
-
     }
 }
