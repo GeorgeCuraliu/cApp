@@ -688,7 +688,8 @@ app.post("/createChannel", (req, res) => {//req.body.code (the code of server) r
       users:{},//creating an user object in case the owner changes the acces to private, so he have to invite users
       acces:req.body.channel[1],
       messageAcces:req.body.channel[2],
-      messages:{}
+      messages:{},
+      usersMessageAcces:{}
     }
 
     let data = JSON.parse(jsonData);
@@ -704,8 +705,8 @@ app.post("/createChannel", (req, res) => {//req.body.code (the code of server) r
 })
 
 
-
-app.post("/getChannels", (req, res) => {//req.body.code(server code) req.body.user(so the endpoint will know the accesibility of suer and will select what to return)
+//will return the server`s users to
+app.post("/getChannels", (req, res) => {//req.body.code(server code) req.body.user(so the endpoint will know the accesibility of user and will select what to return)
   console.log(`Requesting channels for the server ${req.body.code}`);
 
   fs.readFile(`data/servers/${req.body.code}.json`, (err, jsonData) => {
@@ -717,10 +718,10 @@ app.post("/getChannels", (req, res) => {//req.body.code(server code) req.body.us
     if(data.owner[0] === req.body.user){//will return all the the channels if the owner is accesing the endpoint
 
       Object.entries(data.channels).map(([key, value]) => {
-        response[key] = {acces: value.acces, messageAcces: value.messageAcces, users: value.users}
+        response[key] = {acces: value.acces, messageAcces: value.messageAcces, users: value.users, usersMessageAcces: value.usersMessageAcces}
       })
 
-      return res.send({channels: response, mainChannel: data.mainChannel});
+      return res.status(200).send({channels: response, mainChannel: data.mainChannel, users: data.users});
     }
   })
 
@@ -854,7 +855,7 @@ app.post("/createServer", (req, res) => {
 app.post("/getServerBasicInfo", (req, res) => { //this endpoint will return some basic info about the server for a possible join request
 
   fs.readFile(`data/servers/${req.body.code}.json`, (err, jsonData) => {
-    if(err){return res.status(204)}
+    if(err){ return res.status(204).send()}
 
     let data = JSON.parse(jsonData);
     let basicInfo = {};
@@ -872,12 +873,35 @@ app.post("/sendServerJoinRequest", (req, res) => {//req.body.serverCode  req.bod
     if(err){return res.status(404)}
 
     let data = JSON.parse(jsonData);
-    data.joinRequests[req.body.sender[1]] = req.body.sender[0];
+    data.joinRequests[req.body.sender[0]] = req.body.sender[1];
 
     fs.writeFile(`data/servers/${req.body.serverCode}.json`, JSON.stringify(data), err => {
       if(err){return res.status(404)}
       return res.status(200).send();
     })
+  })
+
+})
+
+
+app.post("/sendServerJoinRequestResponse", (req, res) => {//req.body.response(true/false)  req.body.userCode req.body.serverCode
+
+  fs.readFile(`data/servers/${req.body.serverCode}.json`, (err, jsonData) => {
+    if(err){return res.status(404).send()}
+
+    let data = JSON.parse(jsonData);
+
+    if(req.body.response){
+      data.users[req.body.userCode] = data.joinRequests[req.body.userCode];
+    }
+
+    delete data.joinRequests[req.body.userCode];
+
+    fs.writeFile(`data/servers/${req.body.serverCode}.json`, JSON.stringify(data), err => {
+      if(err){return res.status(404).send()}
+      return res.status(200).send(`Response for the user ${req.body.userCode} was succesfully applied for the case ${req.body.response}`);
+    })
+
   })
 
 })
@@ -890,7 +914,8 @@ app.post("/getGlobalServerSettings", (req, res) => {//req.body.serverCode
 
     let data = JSON.parse(jsonData);
     let globalSettings = {//will contain just data about global settings
-      joinRequests : data.joinRequests
+      joinRequests : data.joinRequests,
+      users : data.users
     };
     console.log(data.joinRequests);
     
@@ -899,6 +924,122 @@ app.post("/getGlobalServerSettings", (req, res) => {//req.body.serverCode
   })
 })
 
+
+app.post("/eliminateUserFromServer", (req, res) => {//req.body.serverCode  req.body.userCode
+
+  fs.readFile(`data/servers/${req.body.serverCode}.json`, (err, jsonData) => {
+    if(err){return res.status(404).send()}
+
+    let data = JSON.parse(jsonData);
+
+
+    delete data.users[req.body.userCode];
+
+    fs.writeFile(`data/servers/${req.body.serverCode}.json`, JSON.stringify(data), err => {
+      if(err){return res.status(404).send()}
+      return res.status(200).send(`User ${req.body.userCode} eliminated succesfully`);
+    })
+
+  })
+
+})
+
+
+app.post("/deleteServer", (req, res) => {//req.body.serverCode
+
+  fs.readFile(`data/servers/${req.body.serverCode}.json`, (err, jsonData) => {//accesing the data pf the server that will be deleted so we can ermove the users and owners data of this server
+    if(err){return res.status(203).send()}
+
+    let serverData = JSON.parse(jsonData);
+
+    fs.readFile(`data/users/${serverData.owner[1]}.json`, (err, jsonData) => {//will delete the owner`s data about the server
+      if(err){return res.status(203).send()}
+
+      let userData = JSON.parse(jsonData);
+
+      delete userData.ownServers[req.body.serverCode];
+
+      fs.writeFile(`data/users/${serverData.owner[1]}.json`, JSON.stringify(userData), err => {
+        if(err){return res.status(203).send()}
+
+        Object.keys(serverData.users).forEach(element => {//will delete every users`s data about the server
+
+          fs.readFile(`data/users/${element}.json`, (err, jsonData) => {
+            if(err){return res.status(203).send()}
+
+            let tempUserData = JSON.parse(jsonData);
+
+            delete tempUserData.memberInServers[req.body.serverCode];
+
+            fs.writeFile(`data/users/${element}.json`, JSON.stringify(tempUserData), err => {if(err){return res.status(203).send()}})
+
+          })
+
+        })
+
+        fs.unlink(`data/servers/${req.body.serverCode}.json`, err => {//will delete the server`s file
+          if(err){return res.status(203).send()}
+      
+          return res.status(200).send(`Server ${req.body.serverCode} deleted`)
+        })
+
+      })
+
+    })
+
+  })
+
+
+
+})
+
+
+app.post("/changeUserAccesiblityChannel", (req, res) => {//req.body.serverCode  req.body.channel  req.body.user[code, name]
+
+  fs.readFile(`data/servers/${req.body.serverCode}.json`, (err, jsonData) => {
+    if(err){return res.status(404).send()}
+
+    let data = JSON.parse(jsonData);
+
+    if(data.channels[req.body.channel].users[req.body.user[0]]){//will reverse the acces of the user to the channel
+      delete data.channels[req.body.channel].users[req.body.user[0]];
+    }else{
+      data.channels[req.body.channel].users[req.body.user[0]] = req.body.user[1];
+    }
+
+    fs.writeFile(`data/servers/${req.body.serverCode}.json`, JSON.stringify(data), err => {
+      if(err){return res.status(404).send()}
+
+      return res.status(200).send()
+    })
+
+  })
+
+})
+
+
+app.post("/changeUserMessageAcces", (req, res) => {//req.body.serverCode  req.body.channel  req.body.user[code, name]
+
+  fs.readFile(`data/servers/${req.body.serverCode}.json`, (err, jsonData) => {
+    if(err){return res.status(404).send()}
+
+    let data = JSON.parse(jsonData);
+
+    if(data.channels[req.body.channel].usersMessageAcces[req.body.user[0]]){//will reverse the acces of the user to the channel
+      delete data.channels[req.body.channel].usersMessageAcces[req.body.user[0]];
+    }else{
+      data.channels[req.body.channel].usersMessageAcces[req.body.user[0]] = req.body.user[1];
+    }
+
+    fs.writeFile(`data/servers/${req.body.serverCode}.json`, JSON.stringify(data), err => {
+      if(err){return res.status(404).send()}
+
+      return res.status(200).send()
+    })
+
+  })
+
+})
 
 
 

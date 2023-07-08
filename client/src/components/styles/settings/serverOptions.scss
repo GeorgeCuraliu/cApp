@@ -5,7 +5,7 @@
 
     .options{
         width: 80%;
-        height: 80vh;
+        height: 100vh;
         background-color: cornflowerblue;
 
         .optionsContainer{
@@ -49,6 +49,91 @@
                     }
             }
 
+
+            .globalUserSettings{
+                width: calc(100% - 10vw);
+                height: 80vh;
+                position: relative;
+                left: 10vw;
+                background-color: darkgoldenrod;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+
+                .userCardGlobalSettings{
+                    margin-left: 5%;
+                    margin-top: 8px;
+                    width: 90%;
+                    aspect-ratio: 4/1;
+                    background-color: aquamarine;
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+
+                    .profileImg{
+                        height: 80%;
+                        background-color: black;
+                        aspect-ratio: 1/1;
+                        margin-left: 5px;
+                    }
+
+                    .userCardName{
+                        font-size: 3vh;
+                        color: rebeccapurple;
+                        margin-left: 4px;
+                    }
+
+                    .accept{
+                        background-color: forestgreen;
+                        height: 70%;
+                        aspect-ratio: 1/1;
+                        margin-left: 10px;
+                        cursor: pointer;
+                    }
+
+                    .refuze{
+                        background-color: red;
+                        height: 70%;
+                        aspect-ratio: 1/1;
+                        margin-left: 10px;
+                        cursor: pointer;
+                    }
+
+                    .userCardSettings{
+                        position: absolute;
+                        width: fit-content;
+                        height: fit-content;
+                        background-color: burlywood;
+                        left: 80%;
+
+                        .optionsUserCard{
+                            cursor: pointer;
+                            border: 2px solid black;
+                        }
+                    }
+
+                }
+
+                .globalSettingsUsersContainer{
+                    height: 100%;
+                    width: 20vw;
+                    background-color: forestgreen;
+                    overflow-y: scroll;
+                }
+
+            }
+
+            .deleteServer{
+                background-color: red;
+                font-size: 4vh;
+                width: fit-content;
+                border: 3px solid black;
+                position: relative;
+                left: 200px;
+                cursor: pointer;
+            }
+
+
             .channels{
                 position: absolute;
                 top: 0;
@@ -70,7 +155,7 @@
 
             .channelOptions{
                 width: 58vw;
-                height: 72vh;
+                height: 100vh;
                 background-color: goldenrod;
                 align-self: flex-end;
                 position: absolute;
@@ -108,6 +193,54 @@
                             display: flex;
                             flex-direction: row;
                         }
+                    }
+                }
+
+                .serverUsers{
+                    width: 90%;
+                    min-height: 7vh;
+                    background-color: aqua;
+                    margin-left: 5%;
+                    display: flex;
+                    flex-wrap: wrap;
+
+                    .userCard{
+                        flex: 0 0 auto;
+                        height: 7vh;
+                        margin: 1vh;
+                        width: 25vh;
+                        background-color: green;
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        position: relative;
+
+                        .cardImg{
+                            height: 80%;
+                            background-color: black;
+                            aspect-ratio: 1/1;
+                            margin: 5%;
+                        }
+
+                        .cardName{
+                            font-size: 3vh;
+                            color: cadetblue;
+                        }
+
+                        .cardOptions{
+                            position: absolute;
+                            left: calc(100% - 20px);
+                            width: fit-content;
+                            background-color: gray;
+                            cursor: pointer;
+                            z-index: 9999;
+
+                            .setAccesibility{
+                                white-space: nowrap;
+                            }
+                        }
+
+
                     }
                 }
             }

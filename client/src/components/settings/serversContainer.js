@@ -14,6 +14,7 @@ const ServerContainer = () => {
     const [activeChannel, setActiveChannel] = useState();//will have the active server`s code
     const [mainChannel, setMainChannel] = useState();
     const [globalSettings, setGlobalSettings] = useState(false);//will control the dislay of global settings
+    const [users, setUsers] = useState()
 
     console.log(activeChannel)
 
@@ -40,6 +41,7 @@ const ServerContainer = () => {
                 console.log(response);
                 setChannels(response.data.channels)
                 setMainChannel(response.data.mainChannel)
+                setUsers(response.data.users)
             })
 
         }
@@ -89,19 +91,60 @@ const ServerContainer = () => {
         setGlobalSettings((val) => !val);
         setActiveChannel();
     }
+
+    const changeActiveServer = (serverC) => {
+        setActiveServer(serverC);
+        setActiveChannel(undefined);
+    }
+
+    const changeUserChannelAccesibility = (code, name) => {
+
+            let tempChannels = {...channels}
+            let tempActiveChannel = {...activeChannel}
+
+            if(tempChannels[activeChannel.channelName].users[code]){
+                delete tempChannels[activeChannel.channelName].users[code];
+                delete tempActiveChannel.users[code];
+            }else{
+                tempChannels[activeChannel.channelName].users[code] = name;
+                tempActiveChannel.users[code] = name;
+            }
+
+            setChannels({...tempChannels});
+            setActiveChannel({...tempActiveChannel});
+
+    }
+
+    const chnageUserMessageAccesibility = () => {
+
+            let tempChannels = {...channels}
+            let tempActiveChannel = {...activeChannel}
+
+            if(tempChannels[activeChannel.channelName].usersMessageAcces[code]){
+                delete tempChannels[activeChannel.channelName].usersMessageAcces[code];
+                delete tempActiveChannel.usersMessageAcces[code];
+            }else{
+                tempChannels[activeChannel.channelName].usersMessageAcces[code] = name;
+                tempActiveChannel.usersMessageAcces[code] = name;
+            }
+
+            setChannels({...tempChannels});
+            setActiveChannel({...tempActiveChannel});
+
+    }
     
 
     return(
         <div className="serverDetailedOptionsContainer">
             <section className="servers">
                 {servers && Object.entries(servers).map((server, index) => {
-                    return(<p key={index} onClick={() => {setActiveServer(server[0])}}>{server[1]}</p>)
+                    return(<p key={index} onClick={() => {changeActiveServer(server[0])}}>{server[1]}</p>)
                 })}
             </section>
             <section className="options">
                 {activeServer && (
                     <div className="optionsContainer">
-                        {globalSettings && <GlobalSettings activeServer={activeServer} />}
+                        {globalSettings && <GlobalSettings key={activeServer} activeServer={activeServer} />}
                         <div className="channels">
                             <p className="globalSettings" onClick={triggerGlobalSettings}>Global settings</p>
                             <p className="channelsSectionName">Channels</p>
@@ -111,18 +154,22 @@ const ServerContainer = () => {
                                     <p 
                                         key={key} 
                                         className="channel"
-                                        onClick={() => {triggerChannelOptions({channelName: key, acces: value.acces, messageAcces: value.messageAcces, users: value.users, mainChannel: value.mainChannel})}}>
+                                        onClick={() => {triggerChannelOptions({channelName: key, ...value})}}>
                                     {key}
                                     </p>)
                             })}
 
                          </div>
                             {activeChannel &&  
-                                <ChannelSettings 
+                                <ChannelSettings
                                     activeChannel={activeChannel} 
                                     mainChannel={mainChannel} 
                                     changeMainChannel={changeMainChannel} 
-                                    changeChannelPrivacySettings={changeChannelPrivacySettings}/>}
+                                    changeChannelPrivacySettings={changeChannelPrivacySettings}
+                                    activeServer={activeServer}
+                                    users={users}
+                                    changeUserChannelAccesibility={changeUserChannelAccesibility}
+                                    chnageUserMessageAccesibility={chnageUserMessageAccesibility}/>}
                      </div>)}
                     
             </section>
