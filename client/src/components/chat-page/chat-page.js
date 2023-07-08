@@ -4,15 +4,14 @@ import { useState } from "react";
 import FriendRequestPage from "./friend-request-page";
 import { Context } from "../context/context";
 import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
 import ChatContainer from "./chatContainer";
 import ServerContainer from "./serverContainer";
+import ServerChatContainer from "./serverChatContainer";
 
 
 const ChatPage = () => {    
 
-    const navigate = useNavigate();
-    let { userChatOpen, activeUserChatData} = useContext(Context);
+    let { userChatOpen, activeUserChatData, serverChatOpen} = useContext(Context);
     let [friendPageDisplay, setFriendPageDisplay] = useState(false);//will handle the display of friend requests page
 
     //create a a style object that will just set the flex-direction
@@ -35,6 +34,7 @@ const ChatPage = () => {
             <ServerContainer />
             {friendPageDisplay && <FriendRequestPage  handleFriendPage = {handleFriendPage}/>}
             {userChatOpen && <ChatContainer key={activeUserChatData.name} />}
+            {serverChatOpen && <ServerChatContainer />}
         </div>
     )
 }

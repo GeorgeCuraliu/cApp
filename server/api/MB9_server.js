@@ -768,6 +768,34 @@ app.post("/changeMainChannel", (req, res) => {//req.body.serverCode    req.body.
 })
 
 
+app.post("/getServerData", (req, res) => {//req.body.serverCode   req.body.userCode
+
+  fs.readFile(`data/servers/${req.body.serverCode}.json`, (err, jsonData) => {
+    if(err){return res.status(403).send()}
+
+    let data = JSON.parse(jsonData);
+    let returnInfo = {
+      users: data.users,
+      channels:{},
+      mainChannel: data.mainChannel
+    }
+
+    Object.entries(data.channels).forEach(([key, value]) => {//will add to the return object just the channels that the users has acces to
+      if(value.users[req.body.userCode] || data.owner[1] === req.body.userCode){
+
+        delete value.messages
+        returnInfo.channels[key] = {...value};
+    
+      }
+    })
+
+    return res.status(200).send(returnInfo);
+
+  })
+
+})
+
+
 
 
 

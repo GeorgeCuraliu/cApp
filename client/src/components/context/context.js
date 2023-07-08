@@ -4,12 +4,13 @@ const Context = createContext();
 
 const ContextProvider = ({children}) => {
 
-    let [name, setName] = useState("")
-    let [password, setPassword] = useState("")
-    let [code, setCode] = useState(NaN);
-    let [userChatOpen, setUserChatOpen] = useState(false);
-    let [serverChatOpen, setServerChatOpen] = useState(false);
-    let [activeUserChatData, setActiveUserChatData] = useState({});
+    const [name, setName] = useState("")
+    const [password, setPassword] = useState("")
+    const [code, setCode] = useState(NaN);
+    const [userChatOpen, setUserChatOpen] = useState(false);
+    const [serverChatOpen, setServerChatOpen] = useState(false);
+    const [activeUserChatData, setActiveUserChatData] = useState({});
+    const [activeServerChatData, setActiveServerChatData] = useState()
 
     const contextValues = {
         name,
@@ -24,6 +25,8 @@ const ContextProvider = ({children}) => {
         setServerChatOpen,
         activeUserChatData,
         setActiveUserChatData,
+        activeServerChatData,
+        setActiveServerChatData
     }
 
     useEffect(() => {
@@ -40,6 +43,7 @@ const ContextProvider = ({children}) => {
             setUserChatOpen(parsedValues.userChatOpen);
             setServerChatOpen(parsedValues.serverChatOpen);
             setActiveUserChatData(parsedValues.activeUserChatData);
+            setActiveServerChatData(parsedValues.activeServerChatData);
         }else{
             console.log("No local storage found")
         }
@@ -56,10 +60,11 @@ const ContextProvider = ({children}) => {
             userChatOpen,
             serverChatOpen,
             activeUserChatData,
+            activeServerChatData
           });
         sessionStorage.setItem("contextValues", contextValues);
 
-      }, [name, password, code, userChatOpen, serverChatOpen, activeUserChatData]);
+      }, [name, password, code, userChatOpen, serverChatOpen, activeUserChatData, activeServerChatData]);
 
     return <Context.Provider value={contextValues}>{children}</Context.Provider>
 

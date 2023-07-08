@@ -4,12 +4,13 @@ import { Context } from "../context/context";
 
 const ServerCard = (props) => {
 
-    let {setServerChatOpen, setUserChatOpen, userChatOpen} = useContext(Context)
+    let {setServerChatOpen, setUserChatOpen, userChatOpen, setActiveServerChatData} = useContext(Context)
 
     const handleServerClick = () => {
-        console.log(`server chat triggered for the server ${props.code}`)
+        console.log(`server chat triggered for the server ${props.code}`);
+        if(userChatOpen){setUserChatOpen(false)}//in case that the use chat is open, it turns it off
         setServerChatOpen(true);
-        if(userChatOpen){setUserChatOpen(false)}//in case that the use chat is open, it tursn it off
+        setActiveServerChatData({name : props.name, code: props.code})
     }
 
     return(
