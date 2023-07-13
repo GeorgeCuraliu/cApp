@@ -797,9 +797,61 @@ app.post("/getServerData", (req, res) => {//req.body.serverCode   req.body.userC
 
 
 
+app.post("/getMessagesServer", (req, res) => {//req.body.serverCode  req.body.channel   req.body.lastIndex
+
+  fs.readFile(`data/servers/${req.body.serverCode}.json`, (err, jsonData) => {
+    if(err){return res.status(400).send()}
+
+    let data = JSON.parse(jsonData)
+
+    if(!data.channels[req.body.channel].messages.length){return res.status(200).send("no messages")}
+
+    if(req.body.lastIndex){//first time willr eturn 20 messages then 10
+      let max = lastIndex--;
+      min = lastIndex - 9;
+    }else{
+      let max = Object.keys(data.channels[req.body.channel].messages.length);
+      min = max - 19;
+    }
+
+    let messageKeys = Object.keys(data.channels[req.body.channel].messages.length);
+    let messageValues = Object.values(data.channels[req.body.channel].messages.length);
+    let returnMesages = {};
+
+    for(let i = min; i < max; i++){
+      if(i >= 0){
+        returnMesages[messageKeys[i]] = messageValues[i];
+      }
+    }
+
+    return res.status(200).send(returnMesages)
+
+  })
+
+})
 
 
 
+
+
+app.post("/sendMessageServer", (req, res) => {//req.body.serverCode      req.body.channel        req.body.by   req.body.message
+
+  fs.readFile(`data/servers/${req.body.serverCode}.json`, (err, jsonData) => {
+    if(err){return res.status(400).send()}
+    
+    let data = JSON.parse(jsonData);
+    console.log(req.body)
+    data.channels[req.body.channel].messages[Object.keys(data.channels[req.body.channel].messages).length] = [req.body.message, req.body.by];
+
+    fs.writeFile(`data/servers/${req.body.serverCode}.json`, JSON.stringify(data), err => {
+      if(err){return res.status(400).send(200)}
+
+      return res.status(200).send();
+    })
+
+  })
+
+})
 
 
 
@@ -1061,7 +1113,7 @@ app.post("/changeUserMessageAcces", (req, res) => {//req.body.serverCode  req.bo
 
     fs.writeFile(`data/servers/${req.body.serverCode}.json`, JSON.stringify(data), err => {
       if(err){return res.status(404).send()}
-
+        
       return res.status(200).send()
     })
 

@@ -4,6 +4,8 @@ import { Context } from "../context/context";
 import { useContext, useState, useEffect } from "react";
 import ServerOptionsContainer from "./serverOptionsContainer";
 import axios from "axios";
+import ServerChat from "./serverChatInput";
+import ServerMessageContainer from "./serverMessageContainer";
 
 const ServerChatContainer = () => {
 
@@ -27,6 +29,7 @@ const ServerChatContainer = () => {
             <div className="serverChatContainer">
                 <div style={{...triggerButtonStyle}} className="triggerServerInfo" onClick={() => {setShowServerOptions((val) => !val)}}></div>
                 <ServerHeader name = {activeServerChatData.name} />
+                <ServerChat />
             </div>
             {showServerOptions && <ServerOptionsContainer />}
         </div>
