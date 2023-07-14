@@ -8,6 +8,7 @@ const ServerChatInput = () => {
 
     const {activeServerChatData, code} = useContext(Context);
     const [displayInput, setDisplayInput] = useState(false)
+    const [messages, setMessages] = useState({});
 
     const message = useRef();
 
@@ -24,6 +25,7 @@ const ServerChatInput = () => {
         axios.post("http://localhost:3009/getMessagesServer", {serverCode: activeServerChatData.code, channel: activeServerChatData.activeChannel})
         .then(response => {
             console.log(response)
+            setMessages(response.data)
         })
     }, [])
 
@@ -40,7 +42,7 @@ const ServerChatInput = () => {
 
     return(
         <div className="serverChat">
-            <ServerMessageContainer />
+            <ServerMessageContainer messages = {messages}/>
                 <div className="inputContainer"> 
                     {displayInput? 
                     <div>

@@ -799,32 +799,37 @@ app.post("/getServerData", (req, res) => {//req.body.serverCode   req.body.userC
 
 app.post("/getMessagesServer", (req, res) => {//req.body.serverCode  req.body.channel   req.body.lastIndex
 
+  console.log("requesting server messages")
+
   fs.readFile(`data/servers/${req.body.serverCode}.json`, (err, jsonData) => {
     if(err){return res.status(400).send()}
 
     let data = JSON.parse(jsonData)
 
-    if(!data.channels[req.body.channel].messages.length){return res.status(200).send("no messages")}
+    if(data.channels[req.body.channel].messages && !Object.keys(data.channels[req.body.channel].messages).length === 0){return res.status(200).send("no messages")}
+
+    let max, min;
 
     if(req.body.lastIndex){//first time willr eturn 20 messages then 10
-      let max = lastIndex--;
+      max = lastIndex--;
       min = lastIndex - 9;
     }else{
-      let max = Object.keys(data.channels[req.body.channel].messages.length);
+      max = Object.keys(data.channels[req.body.channel].messages).length;
       min = max - 19;
     }
 
-    let messageKeys = Object.keys(data.channels[req.body.channel].messages.length);
-    let messageValues = Object.values(data.channels[req.body.channel].messages.length);
+    let messageKeys = Object.keys(data.channels[req.body.channel].messages);
+    let messageValues = Object.values(data.channels[req.body.channel].messages);
     let returnMesages = {};
 
-    for(let i = min; i < max; i++){
+    for(let i = max; i > min; i--){
       if(i >= 0){
         returnMesages[messageKeys[i]] = messageValues[i];
       }
     }
 
-    return res.status(200).send(returnMesages)
+    console.log(returnMesages)
+    return res.status(200).send(returnMesages);
 
   })
 

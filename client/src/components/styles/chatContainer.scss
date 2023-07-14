@@ -122,3 +122,38 @@
         }
     }
 }
+
+
+.messageContainer{
+    min-width: 5vw;
+    max-width: 37vw;
+    width: fit-content;
+    min-height: 3vh;
+    height: fit-content;
+    background-color: chocolate;
+    margin: 22px;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+
+    .messageReaction{
+        position: absolute;
+        top: 0px;
+        width: 15px;
+        height: 15px;
+        background-color: black;
+    }
+
+    > p{
+        margin-left: 23px;
+        font-size: 2.2vh;
+    }
+
+    > .cutDiv{
+        width: 21px;
+        position: absolute;
+        height: calc(100% - 15px);
+        bottom: 0;
+        background-color: cadetblue;
+    }
+}
