@@ -804,6 +804,7 @@ app.post("/getMessagesServer", (req, res) => {//req.body.serverCode  req.body.ch
   fs.readFile(`data/servers/${req.body.serverCode}.json`, (err, jsonData) => {
     if(err){return res.status(400).send()}
 
+    console.log(req.body)
     let data = JSON.parse(jsonData)
 
     if(data.channels[req.body.channel].messages && !Object.keys(data.channels[req.body.channel].messages).length === 0){return res.status(200).send("no messages")}
@@ -820,11 +821,11 @@ app.post("/getMessagesServer", (req, res) => {//req.body.serverCode  req.body.ch
 
     let messageKeys = Object.keys(data.channels[req.body.channel].messages);
     let messageValues = Object.values(data.channels[req.body.channel].messages);
-    let returnMesages = {};
+    let returnMesages = {messages: {}, lastIndex: min};
 
-    for(let i = max; i > min; i--){
+    for(let i = min; i < max; i++){
       if(i >= 0){
-        returnMesages[messageKeys[i]] = messageValues[i];
+        returnMesages.messages[messageKeys[i]] = messageValues[i];
       }
     }
 

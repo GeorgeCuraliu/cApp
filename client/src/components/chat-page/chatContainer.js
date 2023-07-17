@@ -6,13 +6,17 @@ import axios from "axios";
 import MessageContainer from "./messageContainer";
 
 const ChatContainer = () => {
+
   let { activeUserChatData, name, code } = useContext(Context);
+
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [messagesLoaded, setMessagesLoaded] = useState(false);
 
   const messageContainerRef = useRef(null);
   const lastIndexRef = useRef();
+  let keepFocus = useRef(false);//will decide if it necessaire to keep focus on an message after fetching another ones
+  let messageRef = useRef();//used to keep focused on an element after the new requested elements  
 
   const sendMessage = () => {
     console.log("sending message");
@@ -35,7 +39,7 @@ const ChatContainer = () => {
   console.log(messages);
   console.log(`${lastIndexRef.current} -> [${lastIndexRef.current - 9}, ${lastIndexRef.current}] -- the future messages request index`);
 
-  const handleScroll = () => {//will alwaws check if it needs to request more messages(if the scoll reach the top of container)
+  const handleScroll = () => {//will always check if it needs to request more messages(if the scoll reach the top of container)
     if (isScrolledToTop()) {
       console.log(`Requesting new messages ${lastIndexRef.current}`);
       axios.post("http://localhost:3009/getMessages", {
@@ -57,7 +61,8 @@ const ChatContainer = () => {
                 ...prevMessages,
             ]);
           }
-
+          console.log(messageRef)
+          keepFocus.current = true
         });
     }
   };
@@ -75,10 +80,7 @@ const ChatContainer = () => {
 
   useEffect(() => {//will request the first messages
     console.log("requesting messages")
-    axios
-      .post("http://localhost:3009/getMessages", {
-        chatCode: activeUserChatData.chatCode,
-      })
+    axios.post("http://localhost:3009/getMessages", {chatCode: activeUserChatData.chatCode,})
       .then((response) => {
         console.log(response);
         const lastIndex = response.data.lastIndex;
@@ -110,6 +112,16 @@ const ChatContainer = () => {
     }
   }, [messagesLoaded]);
 
+  const keepFocusF = () => {
+    if(keepFocus.current){
+      console.log("keeping focus")
+      messageRef.current.scrollIntoView({block: 'start'});
+      keepFocus.current = false;//will redeclare it true just when fetching new messages
+    }
+  }
+
+  console.log(messageRef)
+
   return (
     <div className="chatContainer">
       <header>
@@ -117,13 +129,14 @@ const ChatContainer = () => {
       </header>
       <div className="messagesContainer" ref={messageContainerRef}>
         {messages && messages.map((element, index) => {
+            const ref = index === 10 ? messageRef : null;
             if(element.by[0] === name){//will decide if the message was sent by this user or no, so will know how to display it
-                console.log("message sent by this user")
-                return <MessageContainer key={index} message={element.message} sentByThisUser = {true}/>;
+                return <MessageContainer ref={ref} key={index} message={element.message} sentByThisUser = {true}/>;
             }else{
-                return <MessageContainer key={index} message={element.message} sentByThisUser = {false}/>;
+                return <MessageContainer ref={ref} key={index} message={element.message} sentByThisUser = {false}/>;
             }
           })}
+          {keepFocusF()}
       </div>
       <footer>
         <div>

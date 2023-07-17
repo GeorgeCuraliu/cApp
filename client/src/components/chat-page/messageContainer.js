@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/chatContainer.css"
 
-const MessageContainer = (props) => {
+const MessageContainer = React.forwardRef((props, ref) => {
 
     let messageContainerStyle;
     let pStyle;
@@ -25,12 +25,12 @@ const MessageContainer = (props) => {
     }
     
     return(
-        <div className="messageContainer" style={messageContainerStyle}>
+        <div ref={ref} className="messageContainer" style={messageContainerStyle}>
             <img className="messageReaction" alt="messageReaction"/>
             <div className="cutDiv" style={cutDivStyle}></div>
             <p style={pStyle}>{props.message}</p>
         </div>
     )
-}
+})
 
 export default MessageContainer

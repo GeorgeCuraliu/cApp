@@ -11,7 +11,7 @@ import ServerChatContainer from "./serverChatContainer";
 
 const ChatPage = () => {    
 
-    let { userChatOpen, activeUserChatData, serverChatOpen} = useContext(Context);
+    let { userChatOpen, activeUserChatData, serverChatOpen, activeServerChatData} = useContext(Context);
     let [friendPageDisplay, setFriendPageDisplay] = useState(false);//will handle the display of friend requests page
 
     //create a a style object that will just set the flex-direction
@@ -34,7 +34,7 @@ const ChatPage = () => {
             <ServerContainer />
             {friendPageDisplay && <FriendRequestPage  handleFriendPage = {handleFriendPage}/>}
             {userChatOpen && <ChatContainer key={activeUserChatData.name} />}
-            {serverChatOpen && <ServerChatContainer />}
+            {serverChatOpen && <ServerChatContainer key={activeServerChatData.activeChannel}/>}
         </div>
     )
 }

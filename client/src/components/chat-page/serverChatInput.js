@@ -9,8 +9,10 @@ const ServerChatInput = () => {
     const {activeServerChatData, code} = useContext(Context);
     const [displayInput, setDisplayInput] = useState(false)
     const [messages, setMessages] = useState({});
+    const [messagesLoaded, setMessagesLoaded] = useState(false)
 
     const message = useRef();
+    const lastIndex = useRef();
 
     useEffect(() => {
         if(activeServerChatData.activeChannel && activeServerChatData.channels[activeServerChatData.activeChannel].messageAcces === "public"){
@@ -22,12 +24,21 @@ const ServerChatInput = () => {
 
 
     useEffect(() => {
-        axios.post("http://localhost:3009/getMessagesServer", {serverCode: activeServerChatData.code, channel: activeServerChatData.activeChannel})
-        .then(response => {
-            console.log(response)
-            setMessages(response.data)
-        })
-    }, [])
+        if(activeServerChatData.activeChannel){
+            axios.post("http://localhost:3009/getMessagesServer", {serverCode: activeServerChatData.code, channel: activeServerChatData.activeChannel})
+            .then(response => {
+                console.log(response)
+                setMessages(response.data.messages)
+                lastIndex.current = response.data.lastIndex;
+                setMessagesLoaded(true)
+            }) 
+        }
+    }, [activeServerChatData.activeChannel]);
+
+
+    const requestMessages = () => {
+        console.log(lastIndex)
+    }
 
 
     const sendMessage = () => {
@@ -42,7 +53,7 @@ const ServerChatInput = () => {
 
     return(
         <div className="serverChat">
-            <ServerMessageContainer messages = {messages}/>
+            <ServerMessageContainer requestMessages={requestMessages} messages = {messages} messagesLoaded={messagesLoaded}/>
                 <div className="inputContainer"> 
                     {displayInput? 
                     <div>

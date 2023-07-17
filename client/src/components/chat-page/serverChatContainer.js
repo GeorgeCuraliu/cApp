@@ -5,7 +5,6 @@ import { useContext, useState, useEffect } from "react";
 import ServerOptionsContainer from "./serverOptionsContainer";
 import axios from "axios";
 import ServerChat from "./serverChatInput";
-import ServerMessageContainer from "./serverMessageContainer";
 
 const ServerChatContainer = () => {
 
