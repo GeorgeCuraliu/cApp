@@ -17,7 +17,7 @@ const ServerMessageContainer = (props) => {
 
     const isScrolledToTop = () => {//checks if the top of container is touched
         return messageContainer.current.scrollTop === 0;
-      };
+    };
 
     const handleScroll = () => {
         if(isScrolledToTop()){

@@ -25,7 +25,7 @@ const MessageContainer = React.forwardRef((props, ref) => {
     }
     
     return(
-        <div ref={ref} className="messageContainer" style={messageContainerStyle}>
+        <div ref={ref} className="messageContainer" style={{...messageContainerStyle, ...props.style}}>
             <img className="messageReaction" alt="messageReaction"/>
             <div className="cutDiv" style={cutDivStyle}></div>
             <p style={pStyle}>{props.message}</p>

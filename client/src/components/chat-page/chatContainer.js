@@ -130,10 +130,11 @@ const ChatContainer = () => {
       <div className="messagesContainer" ref={messageContainerRef}>
         {messages && messages.map((element, index) => {
             const ref = index === 10 ? messageRef : null;
+            const style = index === 0 ? {marginTop: "0px"} : null;
             if(element.by[0] === name){//will decide if the message was sent by this user or no, so will know how to display it
-                return <MessageContainer ref={ref} key={index} message={element.message} sentByThisUser = {true}/>;
+                return <MessageContainer ref={ref} style={style} key={index} message={element.message} sentByThisUser = {true}/>;
             }else{
-                return <MessageContainer ref={ref} key={index} message={element.message} sentByThisUser = {false}/>;
+                return <MessageContainer ref={ref} style={style} key={index} message={element.message} sentByThisUser = {false}/>;
             }
           })}
           {keepFocusF()}
