@@ -811,9 +811,9 @@ app.post("/getMessagesServer", (req, res) => {//req.body.serverCode  req.body.ch
 
     let max, min;
 
-    if(req.body.lastIndex){//first time willr eturn 20 messages then 10
-      max = lastIndex--;
-      min = lastIndex - 9;
+    if(req.body.lastIndex){//first time will return 20 messages then 10
+      max = req.body.lastIndex--;
+      min = req.body.lastIndex - 9;
     }else{
       max = Object.keys(data.channels[req.body.channel].messages).length;
       min = max - 19;
@@ -821,11 +821,12 @@ app.post("/getMessagesServer", (req, res) => {//req.body.serverCode  req.body.ch
 
     let messageKeys = Object.keys(data.channels[req.body.channel].messages);
     let messageValues = Object.values(data.channels[req.body.channel].messages);
-    let returnMesages = {messages: {}, lastIndex: min};
+    let returnMesages = {messages: [], lastIndex: min};
 
     for(let i = min; i < max; i++){
       if(i >= 0){
-        returnMesages.messages[messageKeys[i]] = messageValues[i];
+        //returnMesages.messages[messageKeys[i]] = messageValues[i];
+        returnMesages.messages.push(messageValues[i]);
       }
     }
 

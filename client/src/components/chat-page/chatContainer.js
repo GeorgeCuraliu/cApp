@@ -59,10 +59,10 @@ const ChatContainer = () => {
                 setMessages((prevMessages) => [
                 response.data.messages[i],
                 ...prevMessages,
-            ]);
-          }
-          console.log(messageRef)
-          keepFocus.current = true
+                ]);
+            }
+            console.log(messageRef)
+            keepFocus.current = true
         });
     }
   };

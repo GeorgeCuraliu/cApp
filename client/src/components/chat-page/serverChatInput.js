@@ -8,7 +8,7 @@ const ServerChatInput = () => {
 
     const {activeServerChatData, code} = useContext(Context);
     const [displayInput, setDisplayInput] = useState(false)
-    const [messages, setMessages] = useState({});
+    const [messages, setMessages] = useState([]);
     const [messagesLoaded, setMessagesLoaded] = useState(false)
 
     const message = useRef();
@@ -24,6 +24,7 @@ const ServerChatInput = () => {
 
 
     useEffect(() => {
+        console.log("requesting new messages for the channel")
         if(activeServerChatData.activeChannel){
             axios.post("http://localhost:3009/getMessagesServer", {serverCode: activeServerChatData.code, channel: activeServerChatData.activeChannel})
             .then(response => {
@@ -37,7 +38,20 @@ const ServerChatInput = () => {
 
 
     const requestMessages = () => {
-        console.log(lastIndex)
+        console.log(lastIndex.current)
+        if(lastIndex.current <= 0){return}
+        axios.post("http://localhost:3009/getMessagesServer", {serverCode: activeServerChatData.code, channel: activeServerChatData.activeChannel, lastIndex: lastIndex.current})
+            .then(response => {
+                if(typeof(response.data) == "string"){return response.data}
+                console.log(response.data);
+                //setMessages(response.data.messages)
+                //let tempObj = {...response.data.messages, ...messages}
+                //setMessages(tempObj);
+                setMessages(lastVal => [...response.data.messages, ...lastVal])
+                lastIndex.current = response.data.lastIndex;
+                console.log(messages);
+                //setMessagesLoaded(true)
+            })
     }
 
 

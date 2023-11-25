@@ -5,9 +5,14 @@ const ServerOptionsContainer = () => {
 
     const {activeServerChatData, setActiveServerChatData} = useContext(Context)
 
-    const changeMainChannel = (key) => {
-        setActiveServerChatData((val) => ({ ...val, activeChannel: key }));
-    }
+    const changeMainChannel = (channel) => {
+        console.log(`changing active channel to ${channel}`)
+        // setActiveServerChatData((val) => ({ ...val, activeChannel : key }));
+        setActiveServerChatData((val) => ({...val, activeChannel : channel}));
+        console.log(activeServerChatData);
+    };
+
+    console.log(`loaded the options for server`)
 
     return(
         <div className="serverOptionsContainer">

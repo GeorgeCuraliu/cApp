@@ -1,7 +1,7 @@
 import "../styles/chatPage/serverChatContainer.css";
 import ServerHeader from "./serverHeader";
 import { Context } from "../context/context";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import ServerOptionsContainer from "./serverOptionsContainer";
 import axios from "axios";
 import ServerChat from "./serverChatInput";
@@ -18,10 +18,13 @@ const ServerChatContainer = () => {
     useEffect(() => {//there i should request all the server data
         axios.post("http://localhost:3009/getServerData", {serverCode: activeServerChatData.code, userCode: code})
         .then((response) => {
-          console.log(response);
-          setActiveServerChatData({...activeServerChatData, ...response.data, activeChannel: response.data.mainChannel})
+          console.log(response.data);
+          let activeChannel = activeServerChatData.mainChannel ? activeServerChatData.activeChannel : response.data.mainChannel;//used to keep the activeChannel value as it is
+          setActiveServerChatData(data => ({...data, ...response.data, activeChannel: activeChannel}));
         })
-    }, [activeServerChatData.name])
+    }, [activeServerChatData.name]);
+
+    console.log(`showServerOptions ${showServerOptions}`);
 
     return (
         <div className="serverChatBody" >
