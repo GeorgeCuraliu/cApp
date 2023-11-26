@@ -1,0 +1,98 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+
+//APP DATA
+model MB9DATA{
+  applicationName String @unique @default("MrBlec`s chat app")
+  currentUserOrder Int
+  currentChatFileNumber Int
+  currentServerNumber Int
+}
+
+
+
+//USERS
+model Users{
+  username String 
+  usercode Int @unique
+  password String
+  profilePicture Boolean
+  admin Boolean
+}
+
+// model Friends{//will have in its name the usercode 
+//   username String 
+//   usercode Int @unique
+//   friendsSince String
+// }
+
+// model ReceivedFriendRequests{//will have in its name the usercode 
+//   username String 
+//   usercode Int @unique
+// }
+
+// model SentFriendRequests{//will have in its name the usercode 
+//   username String 
+//   usercode Int @unique
+// }
+
+// model OwnedServers{//will have in its name the usercode 
+//   servername String 
+//   servercode Int @unique
+// }
+
+// model MemberInServers{//will have in its name the usercode 
+//   servername String 
+//   servercode Int @unique
+// }
+
+
+
+
+//SERVERS
+model Servers{
+  name String
+  code Int @unique
+  owner String
+  mainChannel String //will separate the code and username by a /
+}
+
+// model JoinRequests{//will have in its name the usercode 
+//   servername String 
+//   servercode Int @unique
+// }
+
+// model ServerUsers{//will have in its name the usercode 
+//   servername String 
+//   servercode Int @unique
+// }
+
+// model Channels{
+//   acces String
+//   messageAcces String
+//   name String @unique
+// }
+
+// model ChannelUsers{
+//   servername String 
+//   servercode Int @unique
+//   messageAcces Boolean
+// }
+
+// model ChannelMessages{
+//   index Int @id @default(autoincrement()) @unique
+//   message String
+//   sentBy Int 
+//   sentAt String   //date
+//   likes String //sotre the usercode with a / betwen them
+// }

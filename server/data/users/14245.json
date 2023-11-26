@@ -1,2 +1,10 @@
-{"userName":"BBBBBBBBBBB","password":"BBBBBBBBBBB","userImage":false,"friends":{},"sentFriendRequest":{},"receivedFriendRequest":{}, "ownServers":{},
-"memberInServers": {}}
+{
+    "userName": "BBBBBBBBBBB",
+    "password": "BBBBBBBBBBB",
+    "userImage": false,
+    "friends": {},
+    "sentFriendRequest": {},
+    "receivedFriendRequest": {},
+    "ownServers": {},
+    "memberInServers": {}
+}

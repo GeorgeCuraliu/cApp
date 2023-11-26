@@ -45,8 +45,9 @@
 
 
 
-
-
+const { PrismaClient } = require('@prisma/client');
+//import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
 
 const express = require('express');
 const cors = require('cors');
@@ -61,73 +62,118 @@ app.use(express.json());
 
 
 
-
-
-
-
-
-
-
-
-
-
 //AUTHENTIFICATION / LOG IN
 
+// app.post('/addAcc', async (req, res) => {
+//   // req is the request sent to the server and in req in the post obj
+//   //the /addAcc will return an array that has an status code(812-server error, 978-data error, 0-everything alright) an return array
+//   // the template object for the user
+//   const userData = {
+//     "userName": req.body.userName,
+//     "password": req.body.password,
+//     "userImage": false,
+//     "friends" : {},//for this 3 i should use both the name and the appCode
+//     "sentFriendRequest": {},
+//     "receivedFriendRequest": {},
+//     "ownServers":{},
+//     "memberInServers": {}
+//   };
+
+//   //acces the app data and get the user order number
+//   fs.readFile('data/MB9DATA.json', 'utf8', (err, data) => {
+//     if (err) {
+//       console.log(err);
+//       return res.send([812,"A server error occurred accessing the app data, please try again later"]); // in case that the server can't access the app data
+//     }
+
+//     const jsonData = JSON.parse(data);
+
+//     for(let user in jsonData.users){//will assure that the sername is free
+//       if(user === req.body.userName){return res.send([978, "The user name is already used, please choose another one"]);}
+//     }
+
+//     jsonData.users[req.body.userName] = [req.body.password, jsonData.currentUserOrder];//add the user info to the user data in server data(just name, password and code);
+
+//     let number = jsonData.currentUserOrder; // Access the current user number order
+//     let userJsonData = JSON.stringify(userData);
+
+//     // access the users folder inside the data and create a user .json file with the data
+//     fs.writeFile(`data/users/${number}.json`, userJsonData, (err) => {
+//       if (err) {
+//         console.log(err);
+//         return res.send([812, "A server error occurred while creating the user data, please try again later"]);
+//       }
+
+//       jsonData.currentUserOrder += 1; // increase the number order;
+
+//       //now update the server data json file with the new values
+//       fs.writeFile('data/MB9DATA.json', JSON.stringify(jsonData), (err) => {
+//         if (err) {
+//           console.log(err);
+//           return res.send(812, ["A server error occurred while updating the app data, please try again later"]);
+//         }
+
+//         res.send([0, `Data for new account received successfully`, number]); // send() === return 
+//       });
+//     });
+//   });
+// });
+
 app.post('/addAcc', async (req, res) => {
-  // req is the request sent to the server and in req in the post obj
-  //the /addAcc will return an array that has an status code(812-server error, 978-data error, 0-everything alright) an return array
-  // the template object for the user
-  const userData = {
-    "userName": req.body.userName,
-    "password": req.body.password,
-    "userImage": false,
-    "friends" : {},//for this 3 i should use both the name and the appCode
-    "sentFriendRequest": {},
-    "receivedFriendRequest": {},
-    "ownServers":{},
-    "memberInServers": {}
-  };
 
-  //acces the app data and get the user order number
-  fs.readFile('data/MB9DATA.json', 'utf8', (err, data) => {
-    if (err) {
-      console.log(err);
-      return res.send([812,"A server error occurred accessing the app data, please try again later"]); // in case that the server can't access the app data
-    }
-
-    const jsonData = JSON.parse(data);
-
-    for(let user in jsonData.users){//will assure that the sername is free
-      if(user === req.body.userName){return res.send([978, "The user name is already used, please choose another one"]);}
-    }
-
-    jsonData.users[req.body.userName] = [req.body.password, jsonData.currentUserOrder];//add the user info to the user data in server data(just name, password and code);
-
-    let number = jsonData.currentUserOrder; // Access the current user number order
-    let userJsonData = JSON.stringify(userData);
-
-    // access the users folder inside the data and create a user .json file with the data
-    fs.writeFile(`data/users/${number}.json`, userJsonData, (err) => {
-      if (err) {
-        console.log(err);
-        return res.send([812, "A server error occurred while creating the user data, please try again later"]);
-      }
-
-      jsonData.currentUserOrder += 1; // increase the number order;
-
-      //now update the server data json file with the new values
-      fs.writeFile('data/MB9DATA.json', JSON.stringify(jsonData), (err) => {
-        if (err) {
-          console.log(err);
-          return res.send(812, ["A server error occurred while updating the app data, please try again later"]);
-        }
-
-        res.send([0, `Data for new account received successfully`, number]); // send() === return 
-      });
+    let AppData =await prisma.MB9DATA.findMany();//get currentUserCode from db
+    AppData[0].currentUserOrder+=1;//increase the current number
+    await prisma.MB9DATA.update({//update the app data with the increased number
+      where: {
+        applicationName: AppData[0].applicationName
+      },
+      data: AppData[0]
     });
-  });
-});
 
+    const user = {
+      "username": req.body.userName,
+      "password": req.body.password,
+      "usercode" : AppData[0].currentUserOrder,
+      "profilePicture": false,
+      "admin" : false
+    }
+    await prisma.Users.create({data : user});//new user will be created along with necesary tables
+    
+    if(typeof(AppData[0].currentUserOrder) !== "number"){return res.status(503).send()}//i have to check first because i use queryRawUnsafe
+    await prisma.$queryRawUnsafe(`
+      CREATE TABLE IF NOT EXISTS "${AppData[0].currentUserOrder}_friends"(
+        username STRING,
+        usercode INT UNIQUE,
+        friendsSince STRING
+      );
+    `);
+    await prisma.$queryRawUnsafe(`
+      CREATE TABLE IF NOT EXISTS "${AppData[0].currentUserOrder}_receivedFriendRequests"(
+        username STRING,
+        usercode INT UNIQUE
+      );
+    `);
+    await prisma.$queryRawUnsafe(`
+      CREATE TABLE IF NOT EXISTS "${AppData[0].currentUserOrder}_sentFriendRequests"(
+        username STRING,
+        usercode INT UNIQUE
+      );
+    `);
+    await prisma.$queryRawUnsafe(`
+      CREATE TABLE IF NOT EXISTS "${AppData[0].currentUserOrder}_OwnServers"(
+        servername STRING,
+        servercode INT UNIQUE
+      );
+    `);
+    await prisma.$queryRawUnsafe(`
+      CREATE TABLE IF NOT EXISTS "${AppData[0].currentUserOrder}_MemberInServers"(
+        servername STRING,
+        servercode INT UNIQUE
+      );
+    `);
+
+    return res.status(200).send();
+});
 
 
 app.post(`/logIn`, (req, res) => {//will handle log in
