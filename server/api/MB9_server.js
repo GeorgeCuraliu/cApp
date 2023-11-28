@@ -47,7 +47,7 @@
 
 
 
-
+const Sequelize = require(`sequelize`);
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
@@ -58,15 +58,219 @@ const port = 3009;
 app.use(cors());
 app.use(express.json());
 
+const sequelize = new Sequelize({
+  dialect: 'sqlite',
+  storage: './db.db'
+});
+
+// const table22 = sequelize.define(`table22`, {
+//   col1:{
+//     type: Sequelize.DataTypes.STRING
+//   },
+//   col2:{
+//     type: Sequelize.DataTypes.NUMBER
+//   }
+// }, {freezeTableName: true});
+
+// table22.sync();
+
+
+
+//DEFINTE THE TABLE MODELS
+const MB9DATA = {
+  currentUserOrder: {
+    type:Sequelize.DataTypes.INTEGER
+  },
+  currentChatFileNumber: {
+    type:Sequelize.DataTypes.INTEGER
+  },
+  currentServerNumber: {
+    type:Sequelize.DataTypes.INTEGER
+  }
+}
+
+const Users = {
+  username: {
+    type: Sequelize.DataTypes.STRING,
+    allowNull: false
+  },
+  password:{
+    type: Sequelize.DataTypes.STRING,
+    allowNull: false
+  },
+  usercode:{
+    type: Sequelize.DataTypes.NUMBER,
+    allowNull: false
+  },
+  profilePicture: {
+    type: Sequelize.DataTypes.BOOLEAN,
+    defaultValue: false
+  },
+  admin: {
+    type: Sequelize.DataTypes.BOOLEAN,
+    defaultValue: false
+  }
+}
+
+const Friends = {
+  username: {
+    type: Sequelize.DataTypes.STRING,
+    allowNull: false
+  },
+  password:{
+    type: Sequelize.DataTypes.STRING,
+    allowNull: false
+  },
+  usercode:{
+    type: Sequelize.DataTypes.NUMBER,
+    allowNull: false
+  }
+}
+
+const ReceivedFriendRequests = {
+  username: {
+    type: Sequelize.DataTypes.STRING,
+    allowNull: false
+  },
+  usercode:{
+    type: Sequelize.DataTypes.NUMBER,
+    allowNull: false
+  }
+}
+
+const SentFriendRequests = {
+  username: {
+    type: Sequelize.DataTypes.STRING,
+    allowNull: false
+  },
+  usercode:{
+    type: Sequelize.DataTypes.NUMBER,
+    allowNull: false
+  }
+}
+
+const OwnedServers = {
+  servername: {
+    type: Sequelize.DataTypes.STRING,
+    allowNull: false
+  },
+  servercode:{
+    type: Sequelize.DataTypes.NUMBER,
+    allowNull: false
+  }
+}
+
+const MemberInServers = {
+  servername: {
+    type: Sequelize.DataTypes.STRING,
+    allowNull: false
+  },
+  servercode:{
+    type: Sequelize.DataTypes.NUMBER,
+    allowNull: false
+  }
+}
 
 
 
 
 
 
+const Servers = {
+  servername:{
+    type: Sequelize.DataTypes.STRING,
+    allowNull: false
+  },
+  servercode: {
+    type: Sequelize.DataTypes.NUMBER,
+    allowNull: false
+  },
+  owner: {
+    type: Sequelize.DataTypes.STRING,
+    allowNull: false
+  },
+  mainChannel : {
+    type: Sequelize.DataTypes.STRING,
+    allowNull: false
+  }
+}
 
+const JoinRequests = {
+  servername:{
+    type: Sequelize.DataTypes.STRING,
+    allowNull: false
+  },
+  servercode: {
+    type: Sequelize.DataTypes.NUMBER,
+    allowNull: false
+  }
+}
 
+const ServerUsers = {
+  servername:{
+    type: Sequelize.DataTypes.STRING,
+    allowNull: false
+  },
+  servercode: {
+    type: Sequelize.DataTypes.NUMBER,
+    allowNull: false
+  }
+}
 
+const Channels = {
+  access: {
+    type: Sequelize.DataTypes.STRING,
+    allowNull: false
+  },
+  messageAcces: {
+    type: Sequelize.DataTypes.STRING,
+    allowNull: false
+  },
+  name: {
+    type: Sequelize.DataTypes.STRING,
+    allowNull: false
+  }
+}
+
+const ChannelUsers = {
+  username:{
+    type: Sequelize.DataTypes.STRING,
+    allowNull: false
+  },
+  usercode: {
+    type: Sequelize.DataTypes.NUMBER,
+    allowNull: false
+  },
+  messageAccess:{
+    type: Sequelize.DataTypes.STRING,
+    allowNull: false
+  }
+}
+
+const ChannelMessages = {
+  index: {
+    type: Sequelize.DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+    unique: true
+  },
+  message: {
+    type: Sequelize.DataTypes.STRING,
+    allowNull: false
+  },
+  sentBy: {
+    type: Sequelize.DataTypes.NUMBER,
+    allowNull: false
+  },
+  sentAt: {
+    type: Sequelize.DataTypes.STRING,
+    allowNull: false
+  },
+  likes: {
+    type: Sequelize.DataTypes.STRING,
+    allowNull: false
+  }
+}
 
 
 
