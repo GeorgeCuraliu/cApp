@@ -16,7 +16,7 @@ const JoinServer = (props) => {
                 .then((response) => {
                     console.log(response);
                     if(response.status === 200){
-                        setBasicInfo(response.data);
+                        setBasicInfo(response.data.server);
                     }else{
                         setBasicInfo({wrongName: true});//this key will be used in case thet the code was wrong
                     }

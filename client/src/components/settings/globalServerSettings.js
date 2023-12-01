@@ -1,8 +1,11 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext} from "react";
+import { Context } from "../context/context";
 
 
 const GlobalSettings = (props) => {
+
+    const {name, code} = useContext(Context);
 
     const [messageAccesNewChannel, setMessageAccesNewChannel] = useState("private");
     const [newChannelPrivacy, setNewChannelPrivacy] = useState("public");
@@ -26,7 +29,7 @@ const GlobalSettings = (props) => {
         console.log(messageAccesNewChannel, newChannelPrivacy, newChannelName)
 
         if(newChannelName){
-            axios.post("http://localhost:3009/createChannel", {code : props.activeServer, channel :[newChannelName, newChannelPrivacy, messageAccesNewChannel]})
+            axios.post("http://localhost:3009/createChannel", {code : props.activeServer, channel :[newChannelName, newChannelPrivacy, messageAccesNewChannel], sender: [code, name]})
             .then(response => {
                 console.log(response)
             })

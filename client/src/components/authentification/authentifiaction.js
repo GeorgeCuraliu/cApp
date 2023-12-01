@@ -20,13 +20,13 @@ const AuthentificationPage = () => {
     axios.post("http://localhost:3009/logIn", {userName: credentials[0], password: credentials[1]})//will verify the retrieved data
         .then(response => {
           console.log(`${response.data} validity of credentials`)
-            if(response.data[0]){
+            if(response.status === 200){
               setName(credentials[0])
               setCode(response.data[1])
               navigate('/chat-page')
-            }else{
-              console.log("The cookie data is invalid")
             }
+        }).catch(err => {
+          console.log("The cookie data is invalid");
         })
   }
   })
@@ -73,19 +73,17 @@ const AuthentificationPage = () => {
 
         axios.post("http://localhost:3009/addAcc", createAccData)//addAcc rouute will be used to craete an account with the sent information, after it was verified
         .then(response => {
-          console.log(response.data[1]);
-          if(response.data[0] !== 0){
-            setDataErrorNewAcc(response.data[1]);
-            setCode(response.data[2])
+          console.log(response.data + " res");
+          if(response.status === 200){
+            setCode(response.data.usercode)
             setName(createAccData.userName);
-          }//updating the error if the data was accepted and processed
-          else{//redirect to the chat page and set a cookie for authentification
-            document.cookie = `user=${createAccData.userName} ${createAccData.password}; SameSite=Strict; Domain=localhost; Path=/http://localhost:${window.location.port}`;
-            navigate('/chat-page');
+            document.cookie = `user=${createAccData.userName} ${createAccData.password}`;
+            //navigate('/chat-page');
           }
         })
         .catch(error => {
-          console.error(error);
+          console.error(error.response.data);
+          setDataErrorNewAcc(error.response.data);
         });
     }else{
       setDataErrorNewAcc("SOME DATA IS MISSING");
@@ -100,13 +98,14 @@ const AuthentificationPage = () => {
     if(logInData.userName && logInData.password){
       axios.post("http://localhost:3009/logIn", logInData)
         .then(response => {
-          console.log(`${response.data} validity of credentials`)
-          if(response.data[0]){
+          if(response.status === 200){
             setName(logInData.userName);
-            setCode(response.data[1])
+            setCode(response.data.code);
             document.cookie = `user=${logInData.userName} ${logInData.password}`;
             navigate('/chat-page');
-          }else{setDataErrorLogIn("Invalid credentials")}
+          }
+        }).catch(err => {
+          setDataErrorLogIn("Invalid credentials");
         })
     }else{
       setDataErrorLogIn("Some data is missing");

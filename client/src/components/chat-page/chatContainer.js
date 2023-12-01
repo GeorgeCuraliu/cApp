@@ -49,10 +49,10 @@ const ChatContainer = () => {
         .then((response) => {
 
             if(typeof(response.data) === "string"){
-                return console.log(response.data)
+                return console.log(response.data);
             }
 
-            console.log(response);
+            console.log(response.data);
             const lastIndex = response.data.lastIndex;
             lastIndexRef.current = lastIndex;
             for (let i = 0; i < response.data.messages.length; i++) {
@@ -82,7 +82,7 @@ const ChatContainer = () => {
     console.log("requesting messages")
     axios.post("http://localhost:3009/getMessages", {chatCode: activeUserChatData.chatCode,})
       .then((response) => {
-        console.log(response);
+        console.log(response.data.messages);
         const lastIndex = response.data.lastIndex;
         lastIndexRef.current = lastIndex;
         for (let i = 0; i < response.data.messages.length; i++) {

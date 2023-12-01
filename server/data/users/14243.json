@@ -1,1 +1,33 @@
-{"userName":"MrBlec","password":"MrBlec-admin","userImage":false,"friends":{"AAAaaa":[14244,"2023-06-12T19:26:22.548Z",972573511139],"MrBlec":[14243,"2023-06-19T20:53:39.327Z",972573511140]},"sentFriendRequest":{"MrBlec":14243},"receivedFriendRequest":{"MrBlec":14243},"ownServers":{"728312356245":"TestServ","728312356246":"TestServ21","728312356247":"TestServ2122"},"memberInServers":{"728312356245":"TestServ","728312356246":"TestServ21","728312356247":"TestServ2122"}}
+{
+    "userName": "MrBlec",
+    "password": "MrBlec-admin",
+    "userImage": false,
+    "friends": {
+        "AAAaaa": [
+            14244,
+            "2023-06-12T19:26:22.548Z",
+            972573511139
+        ],
+        "MrBlec": [
+            14243,
+            "2023-06-19T20:53:39.327Z",
+            972573511140
+        ]
+    },
+    "sentFriendRequest": {
+        "MrBlec": 14243
+    },
+    "receivedFriendRequest": {
+        "MrBlec": 14243
+    },
+    "ownServers": {
+        "728312356245": "TestServ",
+        "728312356246": "TestServ21",
+        "728312356247": "TestServ2122"
+    },
+    "memberInServers": {
+        "728312356245": "TestServ",
+        "728312356246": "TestServ21",
+        "728312356247": "TestServ2122"
+    }
+}

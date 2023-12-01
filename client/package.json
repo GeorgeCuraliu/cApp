@@ -1,6 +1,6 @@
 {
   "name": "chat-app",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
@@ -8,7 +8,6 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.4.0",
     "browserify-zlib": "^0.2.0",
-    "next": "^13.4.4",
     "querystring-es3": "^0.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -24,11 +23,9 @@
     "start": "npm run start-react",
     "start2": "set PORT=2999 && react-scripts start",
     "start-react": "react-scripts start",
-
     "server-start": "pm2 start src/api/MB9_server.js --name server",
     "server-stop": "pm2 stop server",
     "server-restart": "pm2 restart server",
-
     "logs": "pm2 logs",
     "build": "react-scripts build",
     "test": "react-scripts test",

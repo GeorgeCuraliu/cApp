@@ -21,10 +21,10 @@ const ServerContainer = () => {
     useEffect(() => {
         console.log("getting servers info")
         if(code && name){
-            axios.post("http://localhost:3009/getServers", {user: [name, code]})
+            axios.post("http://localhost:3009/getOwnedServers", {user: [name, code]})
             .then(response => {
-                console.log(response.data);
-                setServers(response.data);
+                console.log(response.data.servers);
+                setServers(response.data.servers);
             })
         }
 
@@ -34,9 +34,9 @@ const ServerContainer = () => {
     useEffect(() => {
 
         if(activeServer){
-            console.log("requesting channels");
+            console.log(`requesting channels from user ${code}`);
 
-            axios.post("http://localhost:3009/getChannels", {code: activeServer, user: name})
+            axios.post("http://localhost:3009/getChannels", {code: activeServer, user: code})
             .then(response => {
                 console.log(response);
                 setChannels(response.data.channels)
@@ -159,7 +159,7 @@ const ServerContainer = () => {
                                     </p>)
                             })}
 
-                         </div>
+                        </div>
                             {activeChannel &&  
                                 <ChannelSettings
                                     activeChannel={activeChannel} 
@@ -170,7 +170,7 @@ const ServerContainer = () => {
                                     users={users}
                                     changeUserChannelAccesibility={changeUserChannelAccesibility}
                                     chnageUserMessageAccesibility={chnageUserMessageAccesibility}/>}
-                     </div>)}
+                    </div>)}
                     
             </section>
         </div>
