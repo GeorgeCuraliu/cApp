@@ -18,9 +18,9 @@ const ServerChatContainer = () => {
     useEffect(() => {//there i should request all the server data
         axios.post("http://localhost:3009/getServerData", {serverCode: activeServerChatData.code, userCode: code})
         .then((response) => {
-          console.log(response.data);
-          let activeChannel = activeServerChatData.mainChannel ? activeServerChatData.activeChannel : response.data.mainChannel;//used to keep the activeChannel value as it is
-          setActiveServerChatData(data => ({...data, ...response.data, activeChannel: activeChannel}));
+          console.log(response.data.returnInfo);
+          let activeChannel = activeServerChatData.mainChannel ? activeServerChatData.activeChannel : response.data.returnInfo.mainChannel;//used to keep the activeChannel value as it is
+          setActiveServerChatData(data => ({...data, ...response.data.returnInfo, activeChannel: activeChannel}));
         })
     }, [activeServerChatData.name]);
 
