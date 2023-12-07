@@ -4,10 +4,12 @@ import FriendChatHeader from "./friendsChatHeader";
 import { Context } from "../context/context";
 import axios from "axios";
 import MessageContainer from "./messageContainer";
+import { websocketContext } from "../context/webSocketContext";
 
 const ChatContainer = () => {
 
-  let { activeUserChatData, name, code } = useContext(Context);
+  const { activeUserChatData, name, code } = useContext(Context);
+  const { newUserMessage } = useContext(websocketContext);
 
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -17,6 +19,10 @@ const ChatContainer = () => {
   const lastIndexRef = useRef();
   let keepFocus = useRef(false);//will decide if it necessaire to keep focus on an message after fetching another ones
   let messageRef = useRef();//used to keep focused on an element after the new requested elements  
+
+  useEffect(() => {
+    console.log(newUserMessage);
+  }, [newUserMessage])
 
   const sendMessage = () => {
     console.log("sending message");
@@ -49,10 +55,10 @@ const ChatContainer = () => {
         .then((response) => {
 
             if(typeof(response.data) === "string"){
-                return console.log(response.data)
+                return console.log(response.data);
             }
 
-            console.log(response);
+            console.log(response.data);
             const lastIndex = response.data.lastIndex;
             lastIndexRef.current = lastIndex;
             for (let i = 0; i < response.data.messages.length; i++) {
@@ -82,7 +88,7 @@ const ChatContainer = () => {
     console.log("requesting messages")
     axios.post("http://localhost:3009/getMessages", {chatCode: activeUserChatData.chatCode,})
       .then((response) => {
-        console.log(response);
+        console.log(response.data.messages);
         const lastIndex = response.data.lastIndex;
         lastIndexRef.current = lastIndex;
         for (let i = 0; i < response.data.messages.length; i++) {

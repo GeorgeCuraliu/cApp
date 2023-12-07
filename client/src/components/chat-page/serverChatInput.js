@@ -29,7 +29,7 @@ const ServerChatInput = () => {
             axios.post("http://localhost:3009/getMessagesServer", {serverCode: activeServerChatData.code, channel: activeServerChatData.activeChannel})
             .then(response => {
                 console.log(response)
-                setMessages(response.data.messages)
+                setMessages(response.data.returnMessages)
                 lastIndex.current = response.data.lastIndex;
                 setMessagesLoaded(true)
             }) 
@@ -40,17 +40,13 @@ const ServerChatInput = () => {
     const requestMessages = () => {
         console.log(lastIndex.current)
         if(lastIndex.current <= 0){return}
-        axios.post("http://localhost:3009/getMessagesServer", {serverCode: activeServerChatData.code, channel: activeServerChatData.activeChannel, lastIndex: lastIndex.current})
+        axios.post("http://localhost:3009/getMessagesServer", {serverCode: activeServerChatData.code, channel: activeServerChatData.activeChannel, index: lastIndex.current})
             .then(response => {
                 if(typeof(response.data) == "string"){return response.data}
                 console.log(response.data);
-                //setMessages(response.data.messages)
-                //let tempObj = {...response.data.messages, ...messages}
-                //setMessages(tempObj);
-                setMessages(lastVal => [...response.data.messages, ...lastVal])
+                setMessages(lastVal => [...response.data.returnMessages, ...lastVal])
                 lastIndex.current = response.data.lastIndex;
                 console.log(messages);
-                //setMessagesLoaded(true)
             })
     }
 

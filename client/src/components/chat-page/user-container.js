@@ -17,16 +17,16 @@ const UserContainer = (props) => {
     useEffect(() => {
         if(code && name){
 
-            async function fetchFriendsData() {
-            try {
-                console.log(`accessing the friends data with code ${code}`);
-                const response = await axios.post("http://localhost:3009/getFriends", { code: code });
-                console.log(response.data);
-                setFriends(response.data);
-            } catch (error) {
-                console.log("some critical expected error happened :(")
-                console.log(error);
-            }
+            const fetchFriendsData = async () => {
+                try {
+                    console.log(`accessing the friends data with code ${code}`);
+                    const response = await axios.post("http://localhost:3009/getFriends", { code: code });
+                    console.log(response.data);
+                    setFriends(response.data.friends);
+                } catch (error) {
+                    console.log("some critical expected error happened :(")
+                    console.log(error);
+                }
             }
               
               fetchFriendsData();

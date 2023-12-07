@@ -15,8 +15,8 @@ const ServerContainer = () => {
         if(code && name){
             axios.post("http://localhost:3009/getServers", {user: [name, code]})
             .then(response => {
-                console.log(response.data);
-                setServers(response.data);
+                console.log(response.data.servers);
+                setServers(response.data.servers);
             })
         }
 

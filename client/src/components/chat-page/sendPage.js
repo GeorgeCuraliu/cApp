@@ -20,7 +20,7 @@ const SendPage = () => {
         console.log(searchVal)
         axios.post("http://localhost:3009/findUsers", { searchVal: searchVal })//addAcc rouute will be used to craete an account with the sent information, after it was verified
         .then(response => {
-            setFoundUsers(response.data);
+            setFoundUsers(response.data.foundUsers);
             console.log("Found users response received");
             console.log(response.data)
         })
