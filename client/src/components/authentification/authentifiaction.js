@@ -4,41 +4,42 @@ import "../styles/auth.css";
 import { ReactComponent as Logo } from "../img/mb9-logo.svg";
 import axios from 'axios';
 import { Context } from "../context/context";
+import { useCookies } from "react-cookie";
+import websocket from "../modules/websocket";
 
 const AuthentificationPage = () => {
 
-  let {setName, setCode} = useContext(Context);
-
-  useEffect(() => {
-    //in case the app finds a cookie with log in data, it will try to verify the data and send the user to /chat-page url
-  if(document.cookie){
-    console.log(document.cookie + "  --cookie data found")
-    let credentials = document.cookie.split("=")[1].split(" ");//will get the value and after that will take the name and password as separate values
-    console.log(credentials[0]+ " "+ credentials[1] + "  credntials found");
-    credentials[1] =credentials[1].replace(";", "");
-
-    axios.post("http://localhost:3009/logIn", {userName: credentials[0], password: credentials[1]})//will verify the retrieved data
-        .then(response => {
-          console.log(`${response.data} validity of credentials`)
-            if(response.status === 200){
-              setName(credentials[0])
-              setCode(response.data[1])
-              navigate('/chat-page')
-            }
-        }).catch(err => {
-          console.log("The cookie data is invalid");
-        })
-  }
-  })
+  const [cookies, setCookie] = useCookies(["user"]);
 
   const { type } = useParams();
   const navigate = useNavigate();
+
+  let {setName, setCode} = useContext(Context);
 
   let [authType, setAuthType] = useState(type);
   let [createAccData, setCreateAccData] = useState({userName:"", password:"", password0:""});
   let [logInData, setLogInData] = useState({userName:"", password:""});
   let [dataErrorNewAcc, setDataErrorNewAcc] = useState(null);//will be used for alerting the user if the data he provides is incorrect
   let [dataErrorLogIn, setDataErrorLogIn] = useState(null);
+
+  const logIn = (username, password) => {
+    if(username && password){
+      axios.post("http://localhost:3009/logIn", {userName: username, password: password})
+        .then(response => {
+          if(response.status === 200){
+            setName(username);
+            setCode(response.data.code);
+            setCookie("user", `${username} ${password}`, { path: "/" });
+            websocket.send(JSON.stringify({type:"auth", data: {username: username, usercode: response.data.code}}));
+            navigate('/chat-page');
+          }
+        }).catch(err => {
+          setDataErrorLogIn("Invalid credentials");
+        })
+    }else{
+      setDataErrorLogIn("Some data is missing");
+    }
+  }
 
   const handleBtnClick = (currentType) => {
     setAuthType(currentType);
@@ -71,14 +72,15 @@ const AuthentificationPage = () => {
         if(createAccData.password !== createAccData.password0){setDataErrorNewAcc("PASSWORDS DO NOT MATCH"); return undefined}
         if(createAccData.password.length < 4){setDataErrorNewAcc("PASSWORDS TOO SHORT"); return undefined}
 
-        axios.post("http://localhost:3009/addAcc", createAccData)//addAcc rouute will be used to craete an account with the sent information, after it was verified
+        axios.post("http://localhost:3009/addAcc", createAccData)//addAcc route will be used to craete an account with the sent information, after it was verified
         .then(response => {
           console.log(response.data + " res");
           if(response.status === 200){
-            setCode(response.data.usercode)
+            setCode(response.data.usercode);
             setName(createAccData.userName);
-            document.cookie = `user=${createAccData.userName} ${createAccData.password}`;
-            //navigate('/chat-page');
+            setCookie("user", `${createAccData.userName} ${createAccData.password}`, { path: "/" });
+            websocket.send(JSON.stringify({type:"auth", data: {username: createAccData.userName, usercode: response.data.code}}));
+            navigate('/chat-page');
           }
         })
         .catch(error => {
@@ -94,22 +96,7 @@ const AuthentificationPage = () => {
 
   const sendLogInData = (e) => {
     e.preventDefault();
-
-    if(logInData.userName && logInData.password){
-      axios.post("http://localhost:3009/logIn", logInData)
-        .then(response => {
-          if(response.status === 200){
-            setName(logInData.userName);
-            setCode(response.data.code);
-            document.cookie = `user=${logInData.userName} ${logInData.password}`;
-            navigate('/chat-page');
-          }
-        }).catch(err => {
-          setDataErrorLogIn("Invalid credentials");
-        })
-    }else{
-      setDataErrorLogIn("Some data is missing");
-    }
+    logIn(logInData.userName, logInData.password);
   }
 
   return (

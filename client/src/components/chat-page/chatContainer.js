@@ -4,10 +4,12 @@ import FriendChatHeader from "./friendsChatHeader";
 import { Context } from "../context/context";
 import axios from "axios";
 import MessageContainer from "./messageContainer";
+import { websocketContext } from "../context/webSocketContext";
 
 const ChatContainer = () => {
 
-  let { activeUserChatData, name, code } = useContext(Context);
+  const { activeUserChatData, name, code } = useContext(Context);
+  const { newUserMessage } = useContext(websocketContext);
 
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -17,6 +19,10 @@ const ChatContainer = () => {
   const lastIndexRef = useRef();
   let keepFocus = useRef(false);//will decide if it necessaire to keep focus on an message after fetching another ones
   let messageRef = useRef();//used to keep focused on an element after the new requested elements  
+
+  useEffect(() => {
+    console.log(newUserMessage);
+  }, [newUserMessage])
 
   const sendMessage = () => {
     console.log("sending message");

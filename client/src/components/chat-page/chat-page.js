@@ -7,7 +7,7 @@ import { useContext } from "react";
 import ChatContainer from "./chatContainer";
 import ServerContainer from "./serverContainer";
 import ServerChatContainer from "./serverChatContainer";
-
+import { ContextProviderWebSocket } from "../context/webSocketContext";
 
 const ChatPage = () => {    
 
@@ -23,19 +23,21 @@ const ChatPage = () => {
     }
 
     const handleFriendPage = () => {//this will cahnge the viibilit of friend page
-        console.log("loaded the chat")
+        console.log("loaded the chat");
         setFriendPageDisplay((value) => !value)
     }
 
 
     return(
-        <div style={styleContainer}>
-            <UserContainer  handleFriendPage = {handleFriendPage}/>
-            <ServerContainer />
-            {friendPageDisplay && <FriendRequestPage  handleFriendPage = {handleFriendPage}/>}
-            {userChatOpen && <ChatContainer key={activeUserChatData.name} />}
-            {serverChatOpen && <ServerChatContainer key={activeServerChatData.activeChannel}/>}
-        </div>
+        <ContextProviderWebSocket>
+            <div style={styleContainer}>
+                <UserContainer  handleFriendPage = {handleFriendPage}/>
+                <ServerContainer />
+                {friendPageDisplay && <FriendRequestPage  handleFriendPage = {handleFriendPage}/>}
+                {userChatOpen && <ChatContainer key={activeUserChatData.name} />}
+                {serverChatOpen && <ServerChatContainer key={activeServerChatData.activeChannel}/>}
+            </div>
+        </ContextProviderWebSocket>
     )
 }
 

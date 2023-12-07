@@ -1,68 +1,79 @@
-// //WS-CONNECTION
-// const WebSocket = require('ws')
-
-// const wss = new WebSocket({port: 3009})
-
-
-// wss.on('connection', function connection(ws){
-//   ws.on('message', function message(data){
-//     console.log(data)
-//   })
-
-//   ws.send("connection-ready")
-// })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 const Sequelize = require(`sequelize`);
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
+const expressWs = require('express-ws');
 
 const app = express();
 const port = 3009;
 
 app.use(cors());
 app.use(express.json());
+const expressWsInstance = expressWs(app);
+const aWss = expressWsInstance.getWss();
 
 const sequelize = new Sequelize({
   dialect: 'sqlite',
   storage: './db.db',
   logging: false
 });
+
+
+
+
+
+
+
+
+
+let users = {};
+
+const wsFunctions = {
+
+  auth: (code, ws) => {
+    users[code] = ws;
+    console.log(`users ${code} connected`);
+  },
+  sendUserMessage: (data) => {
+    if(users[data.receiver[1]]){
+      users[data.receiver[1]].send(JSON.stringify({message:data.message}));
+    }
+  }
+
+}
+
+app.ws(`/chat`, (ws, req) => {
+  let usercode;
+
+  ws.on(`message`, message => {
+    const data = JSON.parse(message);
+    usercode = data.data.usercode;
+    if(data.type === "auth"){wsFunctions.auth(data.data.usercode, ws)};
+  })
+
+  ws.on(`close`, async () => {
+    if (!usercode) {
+      return console.log(`no user code used for disconnection`);
+    }
+
+    delete users[usercode];
+    // const table = await sequelize.define(`Users`, Users_TB, { freezeTableName: true });
+    // await table.sync().then(() => {
+    //   table.update({ connected: false }, { where: { usercode } });
+    // });
+    console.log(`${usercode} disconnected`);
+  });
+});
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -99,6 +110,10 @@ const Users_TB = {
     defaultValue: false
   },
   admin: {
+    type: Sequelize.DataTypes.BOOLEAN,
+    defaultValue: false
+  },
+  connected: {
     type: Sequelize.DataTypes.BOOLEAN,
     defaultValue: false
   }
@@ -674,6 +689,8 @@ app.post("/getFriends", (req, res) => {
 app.post("/sendMessage", (req, res) => {//req.body.sender[name, code]      req.body.receiver[name, code]   req.body.message{message ... }    req.body.chatNumber
 
   console.log(`endpoint for sending an message accesed by ${req.body.sender[0]} to ${req.body.receiver[0]}`);
+
+  wsFunctions.sendUserMessage(req.body);
 
   const table = sequelize.define(`CA_userChat_${req.body.chatNumber}`, userChat_TB, {freezeTableName: true});
   table.sync().then(async() => {

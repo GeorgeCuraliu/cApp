@@ -44,13 +44,9 @@ const ServerChatInput = () => {
             .then(response => {
                 if(typeof(response.data) == "string"){return response.data}
                 console.log(response.data);
-                //setMessages(response.data.messages)
-                //let tempObj = {...response.data.messages, ...messages}
-                //setMessages(tempObj);
                 setMessages(lastVal => [...response.data.returnMessages, ...lastVal])
                 lastIndex.current = response.data.lastIndex;
                 console.log(messages);
-                //setMessagesLoaded(true)
             })
     }
 
