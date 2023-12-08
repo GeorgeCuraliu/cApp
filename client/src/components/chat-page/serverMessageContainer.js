@@ -18,12 +18,13 @@ const ServerMessageContainer = (props) => {
     };
 
     const isScrolledToTop = () => {//checks if the top of container is touched
-        console.log(messageContainer.current.scrollTop === 0)
+        console.log(`${messageContainer.current.scrollTop === 0} value for scrolled`);
         return messageContainer.current.scrollTop === 0;
     };
 
     const handleScroll = () => {
         if(isScrolledToTop()){
+            console.log("aa");
             if(!props.requestMessages()){
                 keepFocus.current = true;
             }
@@ -44,10 +45,10 @@ const ServerMessageContainer = (props) => {
 
     const keepFocusF = () => {
         console.log(`value of keepFocus ${keepFocus.current}`)
-        if(keepFocus.current){
+        if(keepFocus.current && messageRef.current){
           console.log(`keeping focus -- value of message ref ${messageRef.current}`);
-          messageRef.current.scrollIntoView({block: 'start'});
           keepFocus.current = false;//will redeclare it true just when fetching new messages
+          messageRef.current.scrollIntoView({block: 'start'});
         }
       }
 

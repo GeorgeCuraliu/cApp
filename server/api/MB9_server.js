@@ -32,12 +32,44 @@ const wsFunctions = {
 
   auth: (code, ws) => {
     users[code] = ws;
-    console.log(`users ${code} connected`);
+    console.log(`user ${code} connected`);
   },
   sendUserMessage: (data) => {
+    console.log("sending message trought ws")
+    console.log(data);
     if(users[data.receiver[1]]){
-      users[data.receiver[1]].send(JSON.stringify({message:data.message}));
+       users[data.receiver[1]].send(JSON.stringify({type:"newUserMessage", data:{message:data.message, by: data.sender}}));
     }
+  },
+  sendServerMessage: async (data) => {//data.serverCode      data.channel        data.by   data.message
+    console.log("sending server message trought ws");
+    console.log(data);
+
+    const serverChannels = await sequelize.define(`CA_ServerChannels_${data.serverCode}`, Channels_TB, {freezeTableName: true});
+    await serverChannels.sync().then( async () => {
+      const channel = await serverChannels.findOne({where:{name: data.channel}});
+      if(channel.dataValues.access === "public"){
+
+        const usersTB = await sequelize.define(`CA_ServerUsers_${data.serverCode}`, ServerUsers_TB, {freezeTableName: true});
+        await usersTB.sync().then( async () => {
+
+          const usersData = await usersTB.findAll();
+          usersData.forEach(user => {
+
+            if(users[user.dataValues.usercode] && user.dataValues.usercode !== data.by){
+              console.log(`sending server message to ${user.dataValues.usercode}`);
+              users[user.dataValues.usercode].send(JSON.stringify({type:"newServerMessage", data:{from: data.by, message: data.message, channel: data.channel, server: data.serverCode}}));
+            }
+
+          })
+
+        })
+
+      }else{
+
+      }
+    })
+
   }
 
 }
@@ -709,7 +741,7 @@ app.post("/sendMessage", (req, res) => {//req.body.sender[name, code]      req.b
 app.post("/getMessages", (req, res) => {
   console.log(`endpoint for getting messages accessed for file ${req.body.chatCode}`);
 
-  if(req.body.index <= 0){//to dont return any messages, beacuse it reached the bottom
+  if(req.body.index <= 0 && req.body.index !== undefined){//to dont return any messages, beacuse it reached the bottom
     console.log("No messages remaining");
     return res.sendStatus(200);
   } 
@@ -748,11 +780,9 @@ app.post("/getMessages", (req, res) => {
     });
 
     messages.forEach(message => {
-      console.log(message.dataValues);
       returnMessages.push({message: message.message, by:[message.byUsername, message.byUsercode]});
     })
     returnMessages.reverse();
-    console.log(returnMessages)
     return res.status(200).json({messages: returnMessages, lastIndex: min-1});
 
   })
@@ -882,16 +912,13 @@ app.post("/getChannels", async (req, res) => {//req.body.code(server code) req.b
       mainChannel = server.dataValues.mainChannel;
 
       if(server.dataValues.ownercode === req.body.user){
-        console.log("awd")
         const PromisesChannels = channels.map(async channel => {
 
             const channelUsersTB = await sequelize.define(`CA_ChannelUsers_${channel.dataValues.name}_${req.body.code}`, ChannelUsers_TB, {freezeTableName: true});
             await channelUsersTB.sync().then(async() => {
 
-            console.log("before forEach");
             const data = await channelUsersTB.findAll();
             data.forEach(user => {
-              console.log("forEach")
               channelUsers[user.dataValues.usercode] = user.dataValues.username;
               if(user.dataValues.messageAccess){
                 usersMessageAcces[user.dataValues.usercode] = user.dataValues.username;
@@ -914,7 +941,6 @@ app.post("/getChannels", async (req, res) => {//req.body.code(server code) req.b
 
           const usersData = await usersTB.findAll();
           usersData.forEach(user => {
-            console.log("users for each")
             users[user.dataValues.usercode] = user.dataValues.username;
           })
 
@@ -932,7 +958,6 @@ app.post("/getChannels", async (req, res) => {//req.body.code(server code) req.b
   })
 
   getData.then(response => {
-    console.log("returning")
     return res.status(200).json({channels: returnChannels, mainChannel: mainChannel, users: users});
   })
 
@@ -980,7 +1005,6 @@ app.post("/getServerData",async (req, res) => {//req.body.serverCode   req.body.
 
       let data = await Servers.findOne();
       returnInfo.mainChannel = data.dataValues.mainChannel;
-      console.log("getting server data1");
   
       const ServerUsers = await sequelize.define(`CA_ServerUsers_${req.body.serverCode}`, ServerUsers_TB, {freezeTableName: true});
       await ServerUsers.sync().then(async() => {
@@ -990,17 +1014,14 @@ app.post("/getServerData",async (req, res) => {//req.body.serverCode   req.body.
         data.forEach(user => {
           returnInfo.users[user.dataValues.usercode] = user.dataValues.username;
         });
-        console.log("getting server data2");
         const channelsTB = await sequelize.define(`CA_ServerChannels_${req.body.serverCode}`, Channels_TB, {freezeTableName: true});
         await channelsTB.sync().then(async() => {
         
-          console.log("getting server data3");
           returnInfo.channels = {};
           const channels = await channelsTB.findAll();
   
           await channels.forEach(async channel => {
-  
-            console.log("getting server data4");
+
             let user;
             const table = await sequelize.define(`CA_ChannelUsers_${channel.dataValues.name}_${req.body.serverCode}`, ChannelUsers_TB, {freezeTableName: true});
             await table.sync().then(async() => {user = await table.findOne({where:{usercode: req.body.userCode}})});
@@ -1011,7 +1032,6 @@ app.post("/getServerData",async (req, res) => {//req.body.serverCode   req.body.
                 acces: channel.dataValues.access,
                 messageAcces: channel.dataValues.messageAcces
               }
-              console.log("getting server data5");
               if(channel.dataValues.access !== "public"){
                 
                 returnInfo.channels[channel.dataValues.name].users = {};
@@ -1039,9 +1059,7 @@ app.post("/getServerData",async (req, res) => {//req.body.serverCode   req.body.
   })
 
   getData.then(response=>{
-    console.log(response);
     console.log(`returning data for server ${req.body.serverCode}`);
-    console.log(returnInfo);
     return res.status(200).json({returnInfo});
   })
 })
@@ -1085,7 +1103,6 @@ app.post("/getMessagesServer",async (req, res) => {//req.body.serverCode  req.bo
       return [message.dataValues.message, message.dataValues.sentBy];
     })
 
-    console.log(returnMessages);
     return res.status(200).json({returnMessages: returnMessages, lastIndex: min-1});
 
   })
@@ -1106,6 +1123,8 @@ app.post("/sendMessageServer", async (req, res) => {//req.body.serverCode      r
     return res.status(200).json({response: "Message added succesfully"});
 
   })
+
+  wsFunctions.sendServerMessage(req.body);
 
 })
 

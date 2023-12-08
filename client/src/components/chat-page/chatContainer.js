@@ -18,11 +18,25 @@ const ChatContainer = () => {
   const messageContainerRef = useRef(null);
   const lastIndexRef = useRef();
   let keepFocus = useRef(false);//will decide if it necessaire to keep focus on an message after fetching another ones
-  let messageRef = useRef();//used to keep focused on an element after the new requested elements  
+  let messageRef = useRef();//used to keep focused on an element after the new requested elements
 
   useEffect(() => {
     console.log(newUserMessage);
-  }, [newUserMessage])
+    if(newUserMessage.by && newUserMessage.by[1] === activeUserChatData.code){
+      addNewMessage(newUserMessage);
+      // console.log("adding new message");
+      // let temp = messages;
+      // temp.push({message: newUserMessage.message.message, by: newUserMessage.by});
+      // setMessages(temp);
+    }
+  }, [newUserMessage]);
+
+  const addNewMessage = (data) => {
+    console.log("Adding new message");
+    const newMessages = messages.slice(); // Create a copy of the messages array
+    newMessages.push({message: data.message.message, by: data.by});
+    setMessages(newMessages); 
+  }
 
   const sendMessage = () => {
     console.log("sending message");
@@ -35,6 +49,8 @@ const ChatContainer = () => {
         })
         .then((response) => {
           console.log(response);
+          console.log(message);
+          addNewMessage({message: {message}, by: [name, code]});
         })
         .catch((error) => {
           console.error(error);
@@ -143,7 +159,7 @@ const ChatContainer = () => {
                 return <MessageContainer ref={ref} style={style} key={index} message={element.message} sentByThisUser = {false}/>;
             }
           })}
-          {keepFocusF()}
+        {keepFocusF()}
       </div>
       <footer>
         <div>
