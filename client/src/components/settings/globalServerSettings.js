@@ -1,11 +1,12 @@
 import axios from "axios";
 import { useState, useEffect, useContext} from "react";
 import { Context } from "../context/context";
-
+import { websocketContext } from "../context/webSocketContext";
 
 const GlobalSettings = (props) => {
 
     const {name, code} = useContext(Context);
+    const {newServerJoinRequest, setNewServerJoinRequest} = useContext(websocketContext);
 
     const [messageAccesNewChannel, setMessageAccesNewChannel] = useState("private");
     const [newChannelPrivacy, setNewChannelPrivacy] = useState("public");
@@ -24,6 +25,18 @@ const GlobalSettings = (props) => {
 
     }, [])
 
+    useEffect(() => {
+        console.log("received new server join request");
+        if(newServerJoinRequest.serverCode === props.activeServer){
+            console.log("adding new data");
+            console.log(newServerJoinRequest);
+            let temp = {...globalSettings};
+            temp.joinRequests[newServerJoinRequest?.sender[0]] = newServerJoinRequest?.sender[1];
+            setNewServerJoinRequest({});
+            setGlobalSettings(temp);
+        }
+    }, [newServerJoinRequest]);
+
 
     const sendNewChannelData = () => {
         console.log(messageAccesNewChannel, newChannelPrivacy, newChannelName)
@@ -37,11 +50,17 @@ const GlobalSettings = (props) => {
     }
 
 
-    const sendServerJoinRequestResponse = (response, userCode) => {//response will be boolean 
+    const sendServerJoinRequestResponse = (response, userCode, username) => {//response will be boolean 
         console.log(`Send response for user ${userCode} with response ${response}`)
         axios.post("http://localhost:3009/sendServerJoinRequestResponse", {serverCode : props.activeServer, userCode: userCode, response: response})
             .then(response => {
-                console.log(response)
+                console.log(response);
+                let temp = {...globalSettings};
+                delete temp.joinRequests[userCode];
+                if(response){
+                    temp.users[userCode] = username;
+                }
+                setGlobalSettings(temp);
             })
     }
 
@@ -50,6 +69,9 @@ const GlobalSettings = (props) => {
         axios.post("http://localhost:3009/eliminateUserFromServer", {serverCode : props.activeServer, userCode: key})
             .then(response => {
                 console.log(response)
+                let temp = {...globalSettings};
+                delete temp.users[key];
+                setGlobalSettings(temp);
             })
     }
 
@@ -94,9 +116,9 @@ const GlobalSettings = (props) => {
                         return(
                         <div className="userCardGlobalSettings" key={value}>
                             <div className="profileImg">imgPic</div>
-                            <p className="userCardName">{key}</p>
-                            <div className="accept" onClick={() => {sendServerJoinRequestResponse(true, key)}}></div>
-                            <div className="refuze" onClick={() => {sendServerJoinRequestResponse(false, key)}}></div>
+                            <p className="userCardName">{value}</p>
+                            <div className="accept" onClick={() => {sendServerJoinRequestResponse(true, key, value)}}></div>
+                            <div className="refuze" onClick={() => {sendServerJoinRequestResponse(false, key, value)}}></div>
                         </div>)
                     })}
                 </div>

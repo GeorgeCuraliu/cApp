@@ -11,6 +11,7 @@ const ReceivedRequestCard = (props) => {
         axios.post("http://localhost:3009/requestReponse", {sender : [name, code], receiver: [props.user, props.code], response: true})//will retrieve a object with friend request for this account
         .then(response => {
             console.log(response.data);
+            props.deleteRequest(props.user);
         })
         .catch(error => {
           console.error(error);
@@ -18,10 +19,11 @@ const ReceivedRequestCard = (props) => {
     }
 
     const refuse = () => {
-        console.log(`sennding request response --- true from ${name} ${code}  to  ${props.user} ${props.code}`);
+        console.log(`sennding request response --- false from ${name} ${code}  to  ${props.user} ${props.code}`);
         axios.post("http://localhost:3009/requestReponse", {sender : [name, code], receiver: [props.user, props.code], response: false})//will retrieve a object with friend request for this account
         .then(response => {
             console.log(response.data);
+            props.deleteRequest(props.user);
         })
         .catch(error => {
           console.error(error);

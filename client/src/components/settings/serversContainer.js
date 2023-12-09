@@ -4,6 +4,7 @@ import { Context } from "../context/context";
 import axios from "axios";
 import ChannelSettings from "./channelSettings";
 import GlobalSettings from "./globalServerSettings";
+import { ContextProviderWebSocket } from "../context/webSocketContext";
 
 const ServerContainer = () => {
 
@@ -27,7 +28,6 @@ const ServerContainer = () => {
                 setServers(response.data.servers);
             })
         }
-
     }, [code, name])
 
 
@@ -135,45 +135,47 @@ const ServerContainer = () => {
     
 
     return(
-        <div className="serverDetailedOptionsContainer">
-            <section className="servers">
-                {servers && Object.entries(servers).map((server, index) => {
-                    return(<p key={index} onClick={() => {changeActiveServer(server[0])}}>{server[1]}</p>)
-                })}
-            </section>
-            <section className="options">
-                {activeServer && (
-                    <div className="optionsContainer">
-                        {globalSettings && <GlobalSettings key={activeServer} activeServer={activeServer} />}
-                        <div className="channels">
-                            <p className="globalSettings" onClick={triggerGlobalSettings}>Global settings</p>
-                            <p className="channelsSectionName">Channels</p>
+        <ContextProviderWebSocket>
+            <div className="serverDetailedOptionsContainer">
+                <section className="servers">
+                    {servers && Object.entries(servers).map((server, index) => {
+                        return(<p key={index} onClick={() => {changeActiveServer(server[0])}}>{server[1]}</p>)
+                    })}
+                </section>
+                <section className="options">
+                    {activeServer && (
+                        <div className="optionsContainer">
+                            {globalSettings && <GlobalSettings key={activeServer} activeServer={activeServer} />}
+                            <div className="channels">
+                                <p className="globalSettings" onClick={triggerGlobalSettings}>Global settings</p>
+                                <p className="channelsSectionName">Channels</p>
 
-                            {channels && Object.entries(channels).map(([key, value]) => {
-                                return(
-                                    <p 
-                                        key={key} 
-                                        className="channel"
-                                        onClick={() => {triggerChannelOptions({channelName: key, ...value})}}>
-                                    {key}
-                                    </p>)
-                            })}
+                                {channels && Object.entries(channels).map(([key, value]) => {
+                                    return(
+                                        <p 
+                                            key={key} 
+                                            className="channel"
+                                            onClick={() => {triggerChannelOptions({channelName: key, ...value})}}>
+                                        {key}
+                                        </p>)
+                                })}
 
-                        </div>
-                            {activeChannel &&  
-                                <ChannelSettings
-                                    activeChannel={activeChannel} 
-                                    mainChannel={mainChannel} 
-                                    changeMainChannel={changeMainChannel} 
-                                    changeChannelPrivacySettings={changeChannelPrivacySettings}
-                                    activeServer={activeServer}
-                                    users={users}
-                                    changeUserChannelAccesibility={changeUserChannelAccesibility}
-                                    chnageUserMessageAccesibility={chnageUserMessageAccesibility}/>}
-                    </div>)}
-                    
-            </section>
-        </div>
+                            </div>
+                                {activeChannel &&  
+                                    <ChannelSettings
+                                        activeChannel={activeChannel} 
+                                        mainChannel={mainChannel} 
+                                        changeMainChannel={changeMainChannel} 
+                                        changeChannelPrivacySettings={changeChannelPrivacySettings}
+                                        activeServer={activeServer}
+                                        users={users}
+                                        changeUserChannelAccesibility={changeUserChannelAccesibility}
+                                        chnageUserMessageAccesibility={chnageUserMessageAccesibility}/>}
+                        </div>)}
+                        
+                </section>
+            </div>
+        </ContextProviderWebSocket>
     )
 
 }

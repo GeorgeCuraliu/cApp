@@ -6,12 +6,14 @@ import { Context } from "../context/context";
 import axios from "axios";
 import FriendCard from "./friend-card";
 import { useNavigate } from "react-router-dom";
+import { websocketContext } from "../context/webSocketContext";
 
 const UserContainer = (props) => {
 
     const navigate = useNavigate();
 
     const {name, code } = useContext(Context);
+    const {newFriend} = useContext(websocketContext);
     let [friends, setFriends] = useState({});
 
     useEffect(() => {
@@ -34,7 +36,16 @@ const UserContainer = (props) => {
         }else{
             console.log("no credentials found, why?")
         }
-    }, [name, code])
+    }, [name, code]);
+
+    useEffect(() => {
+        console.log("new friend data received");
+        let temp = {...friends}
+        if(newFriend.user){
+            temp[newFriend?.user[0]] = [newFriend?.user[1], newFriend?.date, newFriend?.chatCode];
+        }
+        setFriends(temp);
+    }, [newFriend])
 
     const activateFriendRequests = () => {
         console.log("loading user chat")

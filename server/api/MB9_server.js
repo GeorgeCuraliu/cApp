@@ -67,12 +67,55 @@ const wsFunctions = {
 
       }else{
 
+        const usersTB = await sequelize.define(`CA_ChannelUsers_${data.channel}_${data.serverCode}`, ServerUsers_TB, {freezeTableName: true});
+        await usersTB.sync().then( async () => {
+
+          const usersData = await usersTB.findAll();
+          usersData.forEach(user => {
+
+            if(users[user.dataValues.usercode] && user.dataValues.usercode !== data.by){
+              console.log(`sending server message to ${user.dataValues.usercode}`);
+              users[user.dataValues.usercode].send(JSON.stringify({type:"newServerMessage", data:{from: data.by, message: data.message, channel: data.channel, server: data.serverCode}}));
+            }
+
+          })
+
+        })
+
       }
     })
 
+  },
+  sendFriendRequest: (data) => {
+    if(users[data.receiver[1]]){
+      users[data.receiver[1]].send(JSON.stringify({type: "receivedFriendRequest", data: [...data.sender]}));
+    }
+  },
+  newFriend: (data) => {
+    if(users[data.sender[1]]){
+      users[data.sender[1]].send(JSON.stringify({type: "newFriend", data: {chatCode: data.chatCode, user: data.receiver, date: data.date}}))
+    }
+    if(users[data.receiver[1]]){
+      users[data.receiver[1]].send(JSON.stringify({type: "newFriend", data: {chatCode: data.chatCode, user: data.sender, date: data.date}}))
+    }
+  },
+  newServerJoinRequest: async (data) => {//data.serverCode  data.sender[code, name]
+
+    let receiver;
+
+    await Servers.sync().then( async () => {
+      const serverData = await Servers.findOne({where:{servercode: data.serverCode}});
+      receiver = serverData.dataValues.ownercode;
+    })
+
+    if(users[receiver]){
+      console.log("sending new server join request");
+      users[receiver].send(JSON.stringify({type: "newServerJoinRequest", data: data}));
+    }
   }
 
 }
+
 
 app.ws(`/chat`, (ws, req) => {
   let usercode;
@@ -111,7 +154,7 @@ app.ws(`/chat`, (ws, req) => {
 
 
 
-//DEFINTE THE TABLE MODELS
+//DEFINE THE TABLE MODELS
 const MB9DATA_TB = {
   currentUserOrder: {
     type:Sequelize.DataTypes.INTEGER
@@ -477,6 +520,10 @@ const acceptRequest = async (data) => {
   
     await addFriend(data.sender[1], data.receiver[1], data.receiver[0], chatCode);
   
+    const currentDate = new Date();
+    const formattedDate = currentDate.toISOString();
+    wsFunctions.newFriend({chatCode, receiver: data.receiver, sender: data.sender, date: formattedDate});
+
     return true;
   } catch (error) {
     console.log(error);
@@ -617,25 +664,27 @@ app.post("/findUsers", async (req, res) => {
 })
 
 
-app.post("/send",async (req, res) => {//body.sender will have the name of sender, and the body.receiver will have both code and name
+app.post("/send",async (req, res) => {//body.sender will have the name and code of sender, and the body.receiver will have both code and name
     console.log("friend request endpoint accesed")
 
       const ReceiverFR = await sequelize.define(`CA_receivedFriendRequests_${req.body.receiver[1]}`, ReceivedFriendRequests_TB, {freezeTableName: true});
-      ReceiverFR.sync().then( async () => {
+      await ReceiverFR.sync().then( async () => {
         await ReceiverFR.findOrCreate({
           where:{username: req.body.sender[0], usercode: req.body.sender[1]},
           defaults:{username: req.body.sender[0], usercode: req.body.sender[1]}})
       });
 
       const SenderTB = await sequelize.define(`CA_sentFriendRequests_${req.body.sender[1]}`, SentFriendRequests_TB, {freezeTableName: true});
-      SenderTB.sync().then( async () => {
+      await SenderTB.sync().then( async () => {
         await SenderTB.findOrCreate({
           where:{username: req.body.receiver[0], usercode: req.body.receiver[1]},
           defaults:{username: req.body.receiver[0], usercode: req.body.receiver[1]}})
       });
 
+      wsFunctions.sendFriendRequest(req.body);
+
       return res.sendStatus(200);
-})
+});
 
 app.post("/userReceivedRequests", (req, res) => {
     console.log("searching endpoint for available friend requests accesed");
@@ -659,7 +708,7 @@ app.post("/requestReponse", async (req, res) => {//it will receive the type(acce
     //this endpoint will just decide which function should be trigerred
     if(req.body.response){
 
-      let senderCode = await acceptRequest({sender: req.body.sender, receiver: req.body.receiver})
+      let senderCode = await acceptRequest({sender: req.body.sender, receiver: req.body.receiver});
       return res.send(senderCode);
 
     }else{
@@ -1217,12 +1266,14 @@ app.post("/getServerBasicInfo",async (req, res) => { //this endpoint will return
 app.post("/sendServerJoinRequest", async (req, res) => {//req.body.serverCode  req.body.sender[code, name]
 
   const JoinRequest = await sequelize.define(`CA_ServerJoinRequests_${req.body.serverCode}`, JoinRequestsServer_TB, {freezeTableName: true});
-  JoinRequest.sync().then(() => {
+  JoinRequest.sync().then( async () => {
 
-    JoinRequest.create({
+    await JoinRequest.create({
       username: req.body.sender[1],
       usercode: req.body.sender[0]
     })
+
+    wsFunctions.newServerJoinRequest(req.body);
 
     return res.sendStatus(200);
   })
@@ -1247,7 +1298,7 @@ app.post("/sendServerJoinRequestResponse", async (req, res) => {//req.body.respo
       if(req.body.response){
 
         const memberInServers = await sequelize.define(`CA_memberInServers_${req.body.userCode}`, MemberInServers_TB, {freezeTableName: true});
-        memberInServers.sync().then(async() => {
+        await memberInServers.sync().then(async() => {
 
           await memberInServers.create({servername: server.servername, servercode: server.servercode});
 
@@ -1260,7 +1311,9 @@ app.post("/sendServerJoinRequestResponse", async (req, res) => {//req.body.respo
 
           })
 
-        })
+        });
+
+        //wsFunctions
 
       }else{ return res.status(200).json({response: "request declined"})}
 
@@ -1335,13 +1388,15 @@ app.post("/eliminateUserFromServer", async (req, res) => {//req.body.serverCode 
 
             let user = await table.findOne({where:{usercode: req.body.userCode}});
             console.log(user)
-            await user.destroy();
+            if(user){await user.destroy();};
+            
 
           })
-          return res.status(200).json({response: "user eliminated from server data"});
-
+          
         })
 
+        return res.status(200).json({response: "user eliminated from server data"});
+        
       })
 
     })
