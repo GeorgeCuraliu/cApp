@@ -1,1 +1,163 @@
-*,::after,::before{margin:0;border:0;padding:0}.container{width:100vw;height:100vh;margin:0;border:0;padding:0;display:flex;flex-direction:row;gap:0}.container .joinServerContainer{width:100%;height:100%;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);position:absolute;display:flex;align-items:center;justify-content:center;z-index:9000}.container .joinServerContainer .joinServer{height:40vh;aspect-ratio:6/3;background-color:aqua;z-index:9999;display:flex;flex-direction:column}.container .joinServerContainer .joinServer header{width:100%;height:40%;background-color:#008b8b;display:flex;flex-direction:row;justify-content:space-around}.container .joinServerContainer .joinServer header p{color:#db7093;font-size:3vh;cursor:pointer}.container .joinServerContainer .joinServer header input{width:60%;height:3vh}.container .joinServerContainer .joinServer .serverCardContainer{flex-grow:1;display:flex;align-items:center;justify-content:center}.container .joinServerContainer .joinServer .serverCardContainer .serverCard{height:70%;aspect-ratio:3/1;background-color:gray;display:flex;flex-direction:row;align-items:center;cursor:pointer}.container .joinServerContainer .joinServer .serverCardContainer .serverCard .serverImage{height:80%;aspect-ratio:1/1;background-color:#000;margin-left:10px}.container .joinServerContainer .joinServer .serverCardContainer .serverCard p{color:#adff2f;margin-left:10px;font-size:3vh}.container .joinServerContainer .noServerFound{font-size:5vh;color:#b8860b;align-self:center}.container .createServerContainer{width:100%;height:100%;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);position:absolute;display:flex;align-items:center;justify-content:center;z-index:9000}.container .createServerContainer .serverOptionsHeader{height:40vh;width:80vh;background-color:aqua;display:flex;flex-direction:column;align-items:flex-start}.container .createServerContainer .serverOptionsHeader p{font-size:4vh;margin-left:1vh;margin-top:1vh}.container .createServerContainer .serverOptionsHeader .createServerOptions{width:100%;flex:1;display:flex}.container .createServerContainer .serverOptionsHeader .createServerOptions .inputDataContainer{margin-left:1vw;display:flex;flex-direction:column;width:30%;gap:2vh}.container .createServerContainer .serverOptionsHeader .confirmNewServer{cursor:pointer;place-self:center}.container>.categorys{width:15vw;height:100vh;background-color:#5f9ea0;display:flex;flex-direction:column;gap:1vh}.container>.categorys>section{width:calc(100% - 4px);height:5vw;background-color:#ffebcd;display:flex;justify-content:center;align-items:center;border:2px solid #000;cursor:pointer}
+*, ::after, ::before {
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+
+.container {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  border: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+}
+.container .joinServerContainer {
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(4px);
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9000;
+}
+.container .joinServerContainer .joinServer {
+  height: 40vh;
+  aspect-ratio: 6/3;
+  background-color: #E48F45;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  border-radius: 40px;
+  border: 4px solid gray;
+  border-top-left-radius: 0;
+}
+.container .joinServerContainer .joinServer header {
+  width: 100%;
+  height: 40%;
+  background-color: #994D1C;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  border-top-right-radius: 40px;
+}
+.container .joinServerContainer .joinServer header p {
+  color: green;
+  font-size: 4.5vh;
+  font-weight: 700;
+  cursor: pointer;
+}
+.container .joinServerContainer .joinServer header input {
+  width: 60%;
+  height: 3vh;
+}
+.container .joinServerContainer .joinServer .serverCardContainer {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.container .joinServerContainer .joinServer .serverCardContainer .serverCard {
+  height: 70%;
+  aspect-ratio: 3/1;
+  background-color: grey;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+}
+.container .joinServerContainer .joinServer .serverCardContainer .serverCard .serverImage {
+  height: 80%;
+  aspect-ratio: 1/1;
+  background-color: black;
+  margin-left: 10px;
+}
+.container .joinServerContainer .joinServer .serverCardContainer .serverCard p {
+  color: greenyellow;
+  margin-left: 10px;
+  font-size: 3vh;
+}
+.container .joinServerContainer .noServerFound {
+  font-size: 5vh;
+  color: darkgoldenrod;
+  align-self: center;
+}
+.container .createServerContainer {
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(4px);
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9000;
+}
+.container .createServerContainer .serverOptionsHeader {
+  height: 30vh;
+  width: 40vh;
+  background-color: #E48F45;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border: 2px solid black;
+  border-radius: 20px;
+}
+.container .createServerContainer .serverOptionsHeader p {
+  font-size: 4vh;
+  margin-left: 1vh;
+  margin-top: 1vh;
+  color: black;
+}
+.container .createServerContainer .serverOptionsHeader .createServerOptions {
+  margin-top: 2vw;
+  width: 100%;
+  flex: 1;
+  display: flex;
+}
+.container .createServerContainer .serverOptionsHeader .createServerOptions .inputDataContainer {
+  margin-left: 1vw;
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  gap: 2vh;
+}
+.container .createServerContainer .serverOptionsHeader .createServerOptions .inputDataContainer > input {
+  height: 1.5vw;
+  font-size: 1.3vw;
+  border-radius: 2px;
+  border: 0.5px solid gray;
+}
+.container .createServerContainer .serverOptionsHeader .confirmNewServer {
+  cursor: pointer;
+  place-self: center;
+  height: 4vw;
+  aspect-ratio: 3/1;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  border: 1px solid black;
+}
+.container > .categorys {
+  width: 15vw;
+  height: 100vh;
+  background-color: #6B240C;
+  display: flex;
+  flex-direction: column;
+  gap: 1vh;
+}
+.container > .categorys > section {
+  width: calc(100% - 4px);
+  height: 5vw;
+  background-color: #994D1C;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid black;
+  cursor: pointer;
+  font-size: 2vw;
+  font-weight: 600;
+}
+
+/*# sourceMappingURL=settings.css.map */

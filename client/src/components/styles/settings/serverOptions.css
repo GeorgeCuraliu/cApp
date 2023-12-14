@@ -1,1 +1,237 @@
-.serverOptions{width:85vw;height:100vh;background-color:#00008b}.serverOptions .options{width:80%;height:100vh;background-color:#6495ed}.serverOptions .options .optionsContainer{width:100%;height:100%;position:relative}.serverOptions .options .optionsContainer .createChannel{background-color:#ffebcd;display:flex;flex-direction:row;height:8vh;width:58vw;margin-left:auto;justify-content:space-between;position:relative}.serverOptions .options .optionsContainer .createChannel .confirmChannel{position:absolute;right:90px;bottom:5px;background-color:#00008b;color:pink;cursor:pointer}.serverOptions .options .optionsContainer .createChannel .channelNameContainer{align-items:center}.serverOptions .options .optionsContainer .createChannel .channelNameContainer input{height:2vh;font-size:2vh}.serverOptions .options .optionsContainer .createChannel div{margin-left:14px;display:flex;flex-direction:row;align-items:center}.serverOptions .options .optionsContainer .globalUserSettings{width:calc(100% - 10vw);height:80vh;position:relative;left:10vw;background-color:#b8860b;display:flex;flex-direction:row;justify-content:space-around}.serverOptions .options .optionsContainer .globalUserSettings .userCardGlobalSettings{margin-left:5%;margin-top:8px;width:90%;aspect-ratio:4/1;background-color:#7fffd4;display:flex;flex-direction:row;align-items:center}.serverOptions .options .optionsContainer .globalUserSettings .userCardGlobalSettings .profileImg{height:80%;background-color:#000;aspect-ratio:1/1;margin-left:5px}.serverOptions .options .optionsContainer .globalUserSettings .userCardGlobalSettings .userCardName{font-size:3vh;color:#639;margin-left:4px}.serverOptions .options .optionsContainer .globalUserSettings .userCardGlobalSettings .accept{background-color:#228b22;height:70%;aspect-ratio:1/1;margin-left:10px;cursor:pointer}.serverOptions .options .optionsContainer .globalUserSettings .userCardGlobalSettings .refuze{background-color:red;height:70%;aspect-ratio:1/1;margin-left:10px;cursor:pointer}.serverOptions .options .optionsContainer .globalUserSettings .userCardGlobalSettings .userCardSettings{position:absolute;width:-moz-fit-content;width:fit-content;height:-moz-fit-content;height:fit-content;background-color:#deb887;left:80%}.serverOptions .options .optionsContainer .globalUserSettings .userCardGlobalSettings .userCardSettings .optionsUserCard{cursor:pointer;border:2px solid #000}.serverOptions .options .optionsContainer .globalUserSettings .globalSettingsUsersContainer{height:100%;width:20vw;background-color:#228b22;overflow-y:scroll}.serverOptions .options .optionsContainer .deleteServer{background-color:red;font-size:4vh;width:-moz-fit-content;width:fit-content;border:3px solid #000;position:relative;left:200px;cursor:pointer}.serverOptions .options .optionsContainer .channels{position:absolute;top:0;width:10vw;height:100%;background-color:gray}.serverOptions .options .optionsContainer .channels .globalSettings{color:#9932cc;cursor:pointer;margin-bottom:15px}.serverOptions .options .optionsContainer .channels .channel{cursor:pointer;margin-bottom:6px}.serverOptions .options .optionsContainer .channelOptions{width:58vw;height:100vh;background-color:#daa520;align-self:flex-end;position:absolute;bottom:0;right:0}.serverOptions .options .optionsContainer .channelOptions .channelOptionHeader{width:58vw;height:10vh;background-color:azure;display:flex;flex-direction:row;justify-content:space-between;align-items:center}.serverOptions .options .optionsContainer .channelOptions .channelOptionHeader p{margin-left:10px}.serverOptions .options .optionsContainer .channelOptions .channelOptionHeader button{cursor:pointer;background-color:#556b2f;color:#000}.serverOptions .options .optionsContainer .channelOptions .channelOptionHeader .channelPrivacyOptions{background-color:#d2691e;height:100%;margin-right:10px;display:flex;flex-direction:column;justify-content:space-around}.serverOptions .options .optionsContainer .channelOptions .channelOptionHeader .channelPrivacyOptions div{display:flex;flex-direction:row}.serverOptions .options .optionsContainer .channelOptions .serverUsers{width:90%;min-height:7vh;background-color:aqua;margin-left:5%;display:flex;flex-wrap:wrap}.serverOptions .options .optionsContainer .channelOptions .serverUsers .userCard{flex:0 0 auto;height:7vh;margin:1vh;width:25vh;background-color:green;display:flex;flex-direction:row;align-items:center;position:relative}.serverOptions .options .optionsContainer .channelOptions .serverUsers .userCard .cardImg{height:80%;background-color:#000;aspect-ratio:1/1;margin:5%}.serverOptions .options .optionsContainer .channelOptions .serverUsers .userCard .cardName{font-size:3vh;color:#5f9ea0}.serverOptions .options .optionsContainer .channelOptions .serverUsers .userCard .cardOptions{position:absolute;left:calc(100% - 20px);width:-moz-fit-content;width:fit-content;background-color:gray;cursor:pointer;z-index:9999}.serverOptions .options .optionsContainer .channelOptions .serverUsers .userCard .cardOptions .setAccesibility{white-space:nowrap}
+.serverOptions {
+  width: 85vw;
+  height: 100vh;
+  background-color: darkblue;
+}
+.serverOptions .options {
+  width: 80%;
+  height: 100vh;
+  background-color: #F3B664;
+}
+.serverOptions .options .optionsContainer {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.serverOptions .options .optionsContainer .createChannel {
+  background-color: #EC8F5E;
+  display: flex;
+  flex-direction: row;
+  height: 10vh;
+  width: 58vw;
+  margin-left: auto;
+  gap: 0.8vw;
+  position: relative;
+}
+.serverOptions .options .optionsContainer .createChannel .confirmChannel {
+  background-color: #EC8F5E;
+  color: red;
+  border: 2px solid black;
+  position: absolute;
+  right: 120px;
+  bottom: 2%;
+  font-size: 2vh;
+  cursor: pointer;
+}
+.serverOptions .options .optionsContainer .createChannel .channelNameContainer {
+  align-items: center;
+}
+.serverOptions .options .optionsContainer .createChannel .channelNameContainer input {
+  border: 2px solid black;
+  height: 2vh;
+  font-size: 2vh;
+}
+.serverOptions .options .optionsContainer .createChannel div {
+  margin-left: 14px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.serverOptions .options .optionsContainer .globalUserSettings {
+  width: calc(100% - 10vw);
+  height: 80vh;
+  position: relative;
+  left: 10vw;
+  background-color: #F3B664;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+.serverOptions .options .optionsContainer .globalUserSettings .userCardGlobalSettings {
+  margin-left: 5%;
+  margin-top: 8px;
+  width: 90%;
+  aspect-ratio: 4/1;
+  background-color: #F3B664;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.serverOptions .options .optionsContainer .globalUserSettings .userCardGlobalSettings .profileImg {
+  height: 70%;
+  background-color: black;
+  aspect-ratio: 1/1;
+  margin-left: 5px;
+}
+.serverOptions .options .optionsContainer .globalUserSettings .userCardGlobalSettings .userCardName {
+  font-size: 3vh;
+  color: rebeccapurple;
+  margin-left: 4px;
+  max-width: 40%;
+}
+.serverOptions .options .optionsContainer .globalUserSettings .userCardGlobalSettings .accept {
+  background-color: forestgreen;
+  height: 30%;
+  aspect-ratio: 1/1;
+  margin-left: 10px;
+  cursor: pointer;
+}
+.serverOptions .options .optionsContainer .globalUserSettings .userCardGlobalSettings .refuze {
+  background-color: red;
+  height: 30%;
+  aspect-ratio: 1/1;
+  margin-left: 10px;
+  cursor: pointer;
+}
+.serverOptions .options .optionsContainer .globalUserSettings .userCardGlobalSettings .userCardSettings {
+  position: absolute;
+  width: fit-content;
+  height: fit-content;
+  background-color: burlywood;
+  left: 80%;
+}
+.serverOptions .options .optionsContainer .globalUserSettings .userCardGlobalSettings .userCardSettings .optionsUserCard {
+  cursor: pointer;
+  border: 2px solid black;
+}
+.serverOptions .options .optionsContainer .globalUserSettings .globalSettingsUsersContainer {
+  height: 100%;
+  width: 20vw;
+  background-color: #9FBB73;
+  overflow-y: auto;
+  border: 2px solid black;
+  overflow-x: hidden;
+}
+.serverOptions .options .optionsContainer .deleteServer {
+  background-color: red;
+  font-size: 4vh;
+  width: fit-content;
+  border: 3px solid black;
+  position: relative;
+  top: 20px;
+  left: 40%;
+  cursor: pointer;
+}
+.serverOptions .options .optionsContainer .channels {
+  position: absolute;
+  top: 0;
+  width: 10vw;
+  height: 100%;
+  background-color: #F5CCA0;
+}
+.serverOptions .options .optionsContainer .channels .channelsSectionName {
+  font-weight: 600;
+  font-size: 1.8vw;
+}
+.serverOptions .options .optionsContainer .channels .globalSettings {
+  color: red;
+  border: 2px solid red;
+  cursor: pointer;
+  margin-bottom: 15px;
+  font-weight: 400;
+  margin-top: 20px;
+  font-size: 1.4vw;
+  margin-left: 1px;
+}
+.serverOptions .options .optionsContainer .channels .channel {
+  cursor: pointer;
+  margin-bottom: 6px;
+  margin-left: 2px;
+  overflow: hidden;
+}
+.serverOptions .options .optionsContainer .channelOptions {
+  width: 58vw;
+  height: 100vh;
+  background-color: #F3B664;
+  align-self: flex-end;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+.serverOptions .options .optionsContainer .channelOptions .channelOptionHeader {
+  width: 58vw;
+  height: 10vh;
+  background-color: #EC8F5E;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.serverOptions .options .optionsContainer .channelOptions .channelOptionHeader p {
+  margin-left: 10px;
+}
+.serverOptions .options .optionsContainer .channelOptions .channelOptionHeader .channelName {
+  font-size: 2vw;
+  width: 25vw;
+  overflow: hidden;
+  text-wrap: nowrap;
+}
+.serverOptions .options .optionsContainer .channelOptions .channelOptionHeader button {
+  cursor: pointer;
+  background-color: darkolivegreen;
+  color: black;
+  margin-left: auto;
+}
+.serverOptions .options .optionsContainer .channelOptions .channelOptionHeader .channelPrivacyOptions {
+  margin-left: auto;
+  height: 100%;
+  margin-right: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.serverOptions .options .optionsContainer .channelOptions .channelOptionHeader .channelPrivacyOptions div {
+  display: flex;
+  flex-direction: row;
+}
+.serverOptions .options .optionsContainer .channelOptions .serverUsers {
+  width: 90%;
+  min-height: 7vh;
+  background-color: aqua;
+  margin-left: 5%;
+  display: flex;
+  flex-wrap: wrap;
+}
+.serverOptions .options .optionsContainer .channelOptions .serverUsers .userCard {
+  flex: 0 0 auto;
+  height: 7vh;
+  margin: 1vh;
+  width: 25vh;
+  background-color: green;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: relative;
+}
+.serverOptions .options .optionsContainer .channelOptions .serverUsers .userCard .cardImg {
+  height: 80%;
+  background-color: black;
+  aspect-ratio: 1/1;
+  margin: 5%;
+}
+.serverOptions .options .optionsContainer .channelOptions .serverUsers .userCard .cardName {
+  font-size: 3vh;
+  color: cadetblue;
+}
+.serverOptions .options .optionsContainer .channelOptions .serverUsers .userCard .cardOptions {
+  position: absolute;
+  left: calc(100% - 20px);
+  width: fit-content;
+  background-color: gray;
+  cursor: pointer;
+  z-index: 9999;
+}
+.serverOptions .options .optionsContainer .channelOptions .serverUsers .userCard .cardOptions .setAccesibility {
+  white-space: nowrap;
+}
+
+/*# sourceMappingURL=serverOptions.css.map */

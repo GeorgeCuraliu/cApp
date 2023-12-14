@@ -4,7 +4,7 @@ import { Context } from "../context/context";
 
 const ServerCard = (props) => {
 
-    let {setServerChatOpen, setUserChatOpen, userChatOpen, setActiveServerChatData} = useContext(Context)
+    let {setServerChatOpen, serverChatOpen, activeServerChatData, setUserChatOpen, userChatOpen, setActiveServerChatData} = useContext(Context)
 
     const handleServerClick = () => {
         console.log(`server chat triggered for the server ${props.code}`);
@@ -13,8 +13,13 @@ const ServerCard = (props) => {
         setActiveServerChatData({name : props.name, code: props.code})
     }
 
+    let styleOBJ = {};
+    if(serverChatOpen && activeServerChatData.name === props.name){
+        styleOBJ = {backgroundColor: "#5C8374"};
+    }
+
     return(
-        <div className="serverCard" onClick={handleServerClick}>
+        <div style={styleOBJ} className="serverCard" onClick={handleServerClick}>
             <div className="serverImage"></div>
             <p className="serverName">{props.name}</p>
         </div>

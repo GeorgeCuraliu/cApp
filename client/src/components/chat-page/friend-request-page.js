@@ -21,7 +21,7 @@ const FriendRequestPage = (props) => {
                         <div onClick={() => {setPage("sent")}}>Send a friend request</div>
                         <div onClick={() => {setPage("received")}}>Received friend requests</div>
                     </section>
-                    <div onClick={props.handleFriendPage}>Close the window</div>
+                    <div className="closeButton" onClick={props.handleFriendPage}>Close the window</div>
                 </header>
                 {page === "sent" && <SendPage />}
                 {page === "received" && <ReceivedPage />}

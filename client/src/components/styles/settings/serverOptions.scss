@@ -6,7 +6,7 @@
     .options{
         width: 80%;
         height: 100vh;
-        background-color: cornflowerblue;
+        background-color: #F3B664;
 
         .optionsContainer{
             width: 100%;
@@ -14,21 +14,23 @@
             position: relative;
 
             .createChannel{
-                    background-color: blanchedalmond; 
+                    background-color: #EC8F5E; 
                     display: flex;
                     flex-direction: row;
-                    height: 8vh;
+                    height: 10vh;
                     width: 58vw;
                     margin-left: auto;
-                    justify-content: space-between;
+                    gap: 0.8vw;
                     position: relative;
 
                     .confirmChannel{
+                        background-color: #EC8F5E;
+                        color: red;
+                        border: 2px solid black;
                         position: absolute;
-                        right: 90px;
-                        bottom: 5px;
-                        background-color: darkblue;
-                        color: pink;
+                        right: 120px;
+                        bottom: 2%;
+                        font-size: 2vh;
                         cursor: pointer;
                     }
 
@@ -36,6 +38,7 @@
                         align-items: center;
 
                         input{
+                            border: 2px solid black;
                             height: 2vh;
                             font-size: 2vh;
                         }
@@ -55,7 +58,7 @@
                 height: 80vh;
                 position: relative;
                 left: 10vw;
-                background-color: darkgoldenrod;
+                background-color: #F3B664;
                 display: flex;
                 flex-direction: row;
                 justify-content: space-around;
@@ -65,13 +68,13 @@
                     margin-top: 8px;
                     width: 90%;
                     aspect-ratio: 4/1;
-                    background-color: aquamarine;
+                    background-color: #F3B664;
                     display: flex;
                     flex-direction: row;
                     align-items: center;
 
                     .profileImg{
-                        height: 80%;
+                        height: 70%;
                         background-color: black;
                         aspect-ratio: 1/1;
                         margin-left: 5px;
@@ -81,11 +84,12 @@
                         font-size: 3vh;
                         color: rebeccapurple;
                         margin-left: 4px;
+                        max-width: 40%;
                     }
 
                     .accept{
                         background-color: forestgreen;
-                        height: 70%;
+                        height: 30%;
                         aspect-ratio: 1/1;
                         margin-left: 10px;
                         cursor: pointer;
@@ -93,7 +97,7 @@
 
                     .refuze{
                         background-color: red;
-                        height: 70%;
+                        height: 30%;
                         aspect-ratio: 1/1;
                         margin-left: 10px;
                         cursor: pointer;
@@ -117,8 +121,10 @@
                 .globalSettingsUsersContainer{
                     height: 100%;
                     width: 20vw;
-                    background-color: forestgreen;
-                    overflow-y: scroll;
+                    background-color: #9FBB73;
+                    overflow-y: auto;
+                    border: 2px solid black;
+                    overflow-x: hidden;
                 }
 
             }
@@ -129,7 +135,8 @@
                 width: fit-content;
                 border: 3px solid black;
                 position: relative;
-                left: 200px;
+                top: 20px;
+                left: 40%;
                 cursor: pointer;
             }
 
@@ -139,24 +146,36 @@
                 top: 0;
                 width: 10vw;
                 height: 100%;
-                background-color: grey;
+                background-color: #F5CCA0;
+
+                .channelsSectionName{
+                    font-weight: 600;
+                    font-size: 1.8vw;
+                }
 
                 .globalSettings{
-                    color: darkorchid;
+                    color: red;
+                    border: 2px solid red;
                     cursor: pointer;
                     margin-bottom: 15px;
+                    font-weight: 400;
+                    margin-top: 20px;
+                    font-size: 1.4vw;
+                    margin-left: 1px;
                 }
 
                 .channel{
                     cursor: pointer;
                     margin-bottom: 6px;
+                    margin-left: 2px;
+                    overflow: hidden;
                 }
             }
 
             .channelOptions{
                 width: 58vw;
                 height: 100vh;
-                background-color: goldenrod;
+                background-color: #F3B664;
                 align-self: flex-end;
                 position: absolute;
                 bottom: 0;
@@ -165,24 +184,31 @@
                 .channelOptionHeader{
                     width: 58vw;
                     height: 10vh;
-                    background-color: azure;
+                    background-color: #EC8F5E;
                     display: flex;
                     flex-direction: row;
-                    justify-content: space-between;
                     align-items: center;
 
                     p{
                         margin-left: 10px;
                     }
 
+                    .channelName{
+                        font-size: 2vw;
+                        width: 25vw;
+                        overflow: hidden;
+                        text-wrap: nowrap;
+                    }
+
                     button{
                         cursor: pointer;
                         background-color:darkolivegreen;
                         color: black;
+                        margin-left: auto;
                     }
 
                     .channelPrivacyOptions{
-                        background-color: chocolate;
+                        margin-left: auto;
                         height: 100%;
                         margin-right: 10px;
                         display: flex;

@@ -8,7 +8,7 @@ import { ContextProviderWebSocket } from "../context/webSocketContext";
 
 const ServerContainer = () => {
 
-    const {name, code} = useContext(Context)
+    const {name, code} = useContext(Context);
     const [servers, setServers] =useState();
     const [activeServer, setActiveServer] = useState();
     const [channels, setChannels] = useState();

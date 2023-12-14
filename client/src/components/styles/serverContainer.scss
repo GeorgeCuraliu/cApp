@@ -1,10 +1,11 @@
 .serverContainer{
     width: 15vw;
-    height: 100vh;
-    background-color: cornflowerblue;
+    height: calc(100vh - 4px);
+    background-color: #0353a4;
     display: flex;
     flex-direction: column;
     align-items: center;
+    border: 2px solid;
 
     .triggerUserContainerContainer{
         display: flex;
@@ -25,7 +26,7 @@
         p{
             margin-right: auto;
             font-size: 3vh;
-            color: blue;
+            color: 5c677d;
         }
 
     }
@@ -33,7 +34,7 @@
     .serverCard{
         width: 90%;
         aspect-ratio: 4/1;
-        background-color: beige;
+        background-color: #b7e4c7;
         margin-top: 20px;
         display: flex;
         flex-direction: row;
@@ -57,22 +58,33 @@
 
 .serverDetailedOptionsContainer{
     width: 100%;
-    min-height: 80vh;
+    min-height: 100vh;
     background-color: darkcyan;
     display: flex;
     flex-direction: row;
 
     .servers{
-        width: 20%;
-        height: 80vh;
-        background-color: darkblue;
+        width: calc(20% - 2px);
+        border: 1px solid black;
+        height: calc(100vh - 2px);
+        background-color: #E48F45;
 
         p{
-            color: red;
-            font-size: 2vh;
+            color: black;
+            font-size: 3vh;
+            overflow: hidden;
+            border: 3px solid black;
+            margin-right: 20px;
+            border-radius: 15px;
             margin-top: 13px;
             margin-left: 5px;
+            padding-left: 10px;
             cursor: pointer;
+            background-color: #F5CCA0;
+        }
+
+        p:hover{
+            background-color: #E48F45;
         }
 
     }

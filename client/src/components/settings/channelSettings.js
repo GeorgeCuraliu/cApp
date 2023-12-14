@@ -28,7 +28,7 @@ const ChannelSettings = (props) => {
     return(
         <div className="channelOptions">
             <div className="channelOptionHeader">
-                <p>{props.activeChannel.channelName}</p>
+                <p className="channelName">{props.activeChannel.channelName}</p>
                     {props.mainChannel !== props.activeChannel.channelName && <button onClick={props.changeMainChannel}>Set this channel as main channel</button>}
                     <div className="channelPrivacyOptions">
                         <div>

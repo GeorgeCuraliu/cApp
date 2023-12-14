@@ -16,13 +16,13 @@ const ServerOptionsContainer = () => {
 
     return(
         <div className="serverOptionsContainer">
-            Channels
+            <div className="sectionTitle">Channels</div>
             {activeServerChatData.channels && Object.keys(activeServerChatData.channels).map((key) => {
-                return <p key={key} onClick={() => {changeMainChannel(key)}}>{key}</p>
+                return <p className="settingCard" key={key} onClick={() => {changeMainChannel(key)}}>{key}</p>
             })}
-            Users
+            <div className="sectionTitle" style={{"paddingTop": "40px"}}>Users</div>
              {activeServerChatData.users && Object.entries(activeServerChatData.users).map(([key, value]) => {
-                return <p key={key}>{value}</p>
+                return <p className="settingCard" key={key}>{value}</p>
             })}
         </div>
     )

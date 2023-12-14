@@ -4,6 +4,8 @@ import "../styles/chatPage/serverChat.css";
 import ServerMessageContainer from "./serverMessageContainer";
 import axios from "axios";
 import { websocketContext } from "../context/webSocketContext";
+import sendMessageImg from "../img/send-message.png"
+import React from "react";
 
 const ServerChatInput = () => {
 
@@ -84,11 +86,11 @@ const ServerChatInput = () => {
             <ServerMessageContainer requestMessages={requestMessages} messages = {messages} messagesLoaded={messagesLoaded}/>
                 <div className="inputContainer"> 
                     {displayInput? 
-                    <div>
-                        <input ref={message} />
-                        <button onClick={sendMessage} className="sendButton"></button>
-                    </div>
-                    : "no write"}
+                    <React.Fragment>
+                        <input placeholder="Type your message here" ref={message} />
+                        <img src={sendMessageImg} onClick={sendMessage} className="sendButton"></img>
+                    </React.Fragment>
+                    : "You do not have message access"}
                 </div>
         </div>
     )

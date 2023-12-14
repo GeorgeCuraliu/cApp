@@ -1,1 +1,36 @@
-.serverChat{background-color:#556b2f;width:100%;height:90vh}.serverChat .serverMessageContainer{flex-grow:1;width:100%;height:80vh;background-color:aqua;display:flex;flex-direction:column;position:relative;overflow-y:scroll}.serverChat .inputContainer{width:100%;height:10vh;background-color:gray}.serverChat .inputContainer .sendButton{width:40px;height:10px;background-color:#000;cursor:pointer}
+.serverChat {
+  width: 100%;
+  height: 90vh;
+}
+.serverChat .serverMessageContainer {
+  flex-grow: 1;
+  width: 100%;
+  height: 86vh;
+  background-color: #00a6fb;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow-y: scroll;
+}
+.serverChat .inputContainer {
+  width: calc(100% - 2px);
+  height: calc(7vh - 2px);
+  border: 1px solid black;
+  background-color: bisque;
+  padding-left: 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+.serverChat .inputContainer input {
+  height: 3vh;
+  width: 65%;
+}
+.serverChat .inputContainer .sendButton {
+  width: 3vh;
+  height: 3vh;
+  background-color: black;
+  cursor: pointer;
+}
+
+/*# sourceMappingURL=serverChat.css.map */

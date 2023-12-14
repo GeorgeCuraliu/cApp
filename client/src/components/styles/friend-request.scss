@@ -17,23 +17,45 @@
     > .windowContainer{
         width: 120vh;
         height: 70vh;
-        background-color: gray;
+        background-color: #9EC8B9;
         z-index: 9999;
+        border: 2px solid black;
+        border-radius: 30px;
 
         > header{
             width: 100%;
             height: 8vh;
-            background-color: black;
+            background-color: #1B4242;
             display: flex;
             justify-content: space-around;
             flex-direction: row;
+            border-top-left-radius: 30px;
+            border-top-right-radius: 23px;
 
             > section{
                 display: flex;
                 flex-direction: row;
                 gap: 6vh;
                 cursor: pointer;
+
+                > div{
+                    color: #9EC8B9;
+                }
+
+                >div:hover{
+                    text-decoration: underline;
+                }
             }
+
+            > .closeButton{
+                color: red;
+                cursor: pointer;
+            }
+
+            > .closeButton:hover{
+                text-decoration: underline;
+            }
+
         }
 
         > .requestContainer{
@@ -58,7 +80,8 @@
                     > input{
                         all: unset;
                         width: 50vw;
-                        border: 3px solid blue;
+                        border: 3px solid #9EC8B9;
+                        border-radius: 15px;
                         padding-left: 2vh;
                         background-color: blanchedalmond;
                     }
@@ -69,7 +92,7 @@
                         display: flex;
                         align-items: center;
                         justify-content: center;
-                        background-color: green;
+                        background-color: greenyellow;
                         border-radius:calc(3vh - 2px);
                         border: 2px solid black;
                         cursor: pointer;
@@ -81,8 +104,8 @@
                     height: 80%;
                     margin-left: 5%;
                     margin-top: 3%;
-                    background-color: aqua;
-                    overflow-y: scroll;
+                    background-color: #9EC8B9;
+                    overflow: auto;
                     display: flex;
                     flex-direction: row;
                     flex-wrap: wrap;
@@ -91,12 +114,13 @@
                         width: 40%;
                         margin: 5%;
                         height: 8vh;
-                        background-color: black;
+                        background-color: #092635;
                         display: flex;
                         display: flex;
                         align-items: center;
                         flex-direction: row;
                         cursor: pointer;
+                        border-radius: 5px;
 
                         > img{
                             height: 85%;
@@ -131,11 +155,12 @@
                 > .receivedRequestCard{
                     width: 80%;
                     height: 14vh;
-                    background-color: aquamarine;
+                    background-color: #092635;
                     margin-left: 5%;
                     margin-top: 1vh;
                     display: flex;
                     justify-content: space-between;
+                    border-radius: 20px;
 
                     > .userInfo{
                         display: flex;
@@ -153,6 +178,7 @@
                         
                         > p{
                             font-size: 8vh;
+                            color: peru;
                         }
                     }
 

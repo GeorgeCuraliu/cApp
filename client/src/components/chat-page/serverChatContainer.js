@@ -30,7 +30,7 @@ const ServerChatContainer = () => {
         <div className="serverChatBody" >
             <div className="serverChatContainer">
                 <div style={{...triggerButtonStyle}} className="triggerServerInfo" onClick={() => {setShowServerOptions((val) => !val)}}></div>
-                <ServerHeader name = {activeServerChatData.name} />
+                <ServerHeader name = {activeServerChatData.name} code={activeServerChatData.code}/>
                 <ServerChat />
             </div>
             {showServerOptions && <ServerOptionsContainer />}

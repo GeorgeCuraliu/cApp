@@ -1,6 +1,7 @@
 .serverChatBody{
     display: flex;
     flex-direction: row;
+    overflow: hidden;
 
     .serverChatContainer{
         height: 100vh;
@@ -22,9 +23,10 @@
             display: flex;
             flex-direction: row;
             align-items: center;
-            width: 100%;
-            height: 10vh;
-            background-color: darkgreen;
+            width: calc(100% - 2px);
+            height: calc(7vh - 2px);
+            border: 1px solid black;
+            background-color: #1951a1;
     
             .serverImage{
                 height: 80%;
@@ -46,5 +48,21 @@
         background-color: darkcyan;
         position: absolute;
         right: 0;
+
+        > .sectionTitle{
+            font-size: 2.5vw;
+            color: palegreen;
+        }
+
+        > .settingCard{
+            font-size: 1.7vw;
+            margin-top: 6px;
+            cursor: pointer;
+            border: 1px solid black;
+            border-radius: 2vw;
+            text-indent: 12px;
+            overflow: hidden;
+        }
+
     }
 }

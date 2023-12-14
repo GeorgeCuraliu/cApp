@@ -1,1 +1,81 @@
-.serverContainer{width:15vw;height:100vh;background-color:#6495ed;display:flex;flex-direction:column;align-items:center}.serverContainer .triggerUserContainerContainer{display:flex;flex-direction:row;width:100%;align-items:center}.serverContainer .triggerUserContainerContainer .triggerUserContainer{width:20%;aspect-ratio:1/1;background-color:#000;border-radius:50%;margin-top:10px;margin-left:10px;margin-right:auto}.serverContainer .triggerUserContainerContainer p{margin-right:auto;font-size:3vh;color:blue}.serverContainer .serverCard{width:90%;aspect-ratio:4/1;background-color:beige;margin-top:20px;display:flex;flex-direction:row;align-items:center;cursor:pointer}.serverContainer .serverCard .serverImage{height:80%;aspect-ratio:1/1;background-color:#000;margin-left:10px}.serverContainer .serverCard p{margin-left:5px;font-size:2vh}.serverDetailedOptionsContainer{width:100%;min-height:80vh;background-color:#008b8b;display:flex;flex-direction:row}.serverDetailedOptionsContainer .servers{width:20%;height:80vh;background-color:#00008b}.serverDetailedOptionsContainer .servers p{color:red;font-size:2vh;margin-top:13px;margin-left:5px;cursor:pointer}
+.serverContainer {
+  width: 15vw;
+  height: calc(100vh - 4px);
+  background-color: #0353a4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 2px solid;
+}
+.serverContainer .triggerUserContainerContainer {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+}
+.serverContainer .triggerUserContainerContainer .triggerUserContainer {
+  width: 20%;
+  aspect-ratio: 1/1;
+  background-color: black;
+  border-radius: 50%;
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: auto;
+}
+.serverContainer .triggerUserContainerContainer p {
+  margin-right: auto;
+  font-size: 3vh;
+  color: 5c677d;
+}
+.serverContainer .serverCard {
+  width: 90%;
+  aspect-ratio: 4/1;
+  background-color: #b7e4c7;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+}
+.serverContainer .serverCard .serverImage {
+  height: 80%;
+  aspect-ratio: 1/1;
+  background-color: black;
+  margin-left: 10px;
+}
+.serverContainer .serverCard p {
+  margin-left: 5px;
+  font-size: 2vh;
+}
+
+.serverDetailedOptionsContainer {
+  width: 100%;
+  min-height: 100vh;
+  background-color: darkcyan;
+  display: flex;
+  flex-direction: row;
+}
+.serverDetailedOptionsContainer .servers {
+  width: calc(20% - 2px);
+  border: 1px solid black;
+  height: calc(100vh - 2px);
+  background-color: #E48F45;
+}
+.serverDetailedOptionsContainer .servers p {
+  color: black;
+  font-size: 3vh;
+  overflow: hidden;
+  border: 3px solid black;
+  margin-right: 20px;
+  border-radius: 15px;
+  margin-top: 13px;
+  margin-left: 5px;
+  padding-left: 10px;
+  cursor: pointer;
+  background-color: #F5CCA0;
+}
+.serverDetailedOptionsContainer .servers p:hover {
+  background-color: #E48F45;
+}
+
+/*# sourceMappingURL=serverContainer.css.map */

@@ -5,6 +5,7 @@ import { Context } from "../context/context";
 import axios from "axios";
 import MessageContainer from "./messageContainer";
 import { websocketContext } from "../context/webSocketContext";
+import sendMessageImg from "../img/send-message.png"
 
 const ChatContainer = () => {
 
@@ -24,10 +25,6 @@ const ChatContainer = () => {
     console.log(newUserMessage);
     if(newUserMessage.by && newUserMessage.by[1] === activeUserChatData.code){
       addNewMessage(newUserMessage);
-      // console.log("adding new message");
-      // let temp = messages;
-      // temp.push({message: newUserMessage.message.message, by: newUserMessage.by});
-      // setMessages(temp);
     }
   }, [newUserMessage]);
 
@@ -39,6 +36,7 @@ const ChatContainer = () => {
   }
 
   const sendMessage = () => {
+    if(!message){return}
     console.log("sending message");
     if (activeUserChatData.name) {
       axios.post("http://localhost:3009/sendMessage", {
@@ -163,13 +161,15 @@ const ChatContainer = () => {
       </div>
       <footer>
         <div>
-          <input
-            placeholder="Type your message here"
-            type="text"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-          />
-          <button onClick={sendMessage}>Send</button>
+          <div className="messageInputContainer">
+            <input
+              placeholder="Type your message here"
+              type="text"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+            />
+            <img src={sendMessageImg} onClick={sendMessage}></img>
+          </div>
           <div>Add image</div>
         </div>
       </footer>

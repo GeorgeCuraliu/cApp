@@ -3,21 +3,23 @@
     height: 100vh;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
     
 
     > header{
-        height: 10vh;
-        width: 100%;
-        background-color: darkblue;
+        height: calc(7vh - 2px);
+        width: calc(100% - 2px);
+        background-color: #0466c8;
         display: flex;
         flex-direction: row;
+        border: 1px solid black;
 
         > div{
             position: relative;
             left: 20px;
             width: calc(100% - 40px);
             height: 100%;
-            background-color: darkblue;
+            background-color: #0466c8;
             display: flex;
             flex-direction: row;
             gap: 30px;
@@ -46,8 +48,8 @@
 
     > .messagesContainer{
         width: 100%;
-        height: 80vh;
-        background-color: cadetblue;
+        height: 86vh;
+        background-color: #00a6fb;
         overflow-y: scroll;
         display: flex;
         flex-direction: column;
@@ -79,46 +81,66 @@
             }
 
             > .cutDiv{
-                width: 21px;
+                width: 15px;
                 position: absolute;
                 height: calc(100% - 15px);
                 bottom: 0;
-                background-color: cadetblue;
+                background-color: #00a6fb;
             }
         }
     }
 
     > footer{
-        width: 100%;
-        height: 10vh;
+        width: calc(100% - 2px);
+        height: calc(7vh - 2px);
         background-color: bisque;
+        display: flex;
+        align-items: center;
+        border: 2px solid black;
 
         > div{
-            width: 100%;
-            height: 50%;
-            background-color: bisque;
             display: flex;
             flex-direction: row;
             gap: 5vw;
             align-items: center;
+            width: 100%;
+            height: 50%;
 
-            > input{
+            > .messageInputContainer {
+                width: 80%;
                 height: 100%;
-                width: 270%;
-                position: relative;
-                left: 20px;
-            }
+                background-color: white;
+                border-left: 10px solid bisque;
+                display: flex;
+                flex-direction: row;
+                gap: 5vw;
 
-            > button{
-                height: 100%;
-                width: 10%;
+                > input{
+                    height: 100%;
+                    width: 270%;
+                    position: relative;
+                    left: 7px;
+                }
+
+                > input:focus{
+                    outline: none;
+                }
+
+                > img{
+                    height: 100%;
+                    width: 10%;
+                    background-color: white;
+                    cursor: pointer;
+                }
+
+                
             }
 
             > div{
-                height: 80%;
-                width: 200px;
-                background-color: black;
-                color: bisque;
+                    height: 80%;
+                    width: 200px;
+                    background-color: black;
+                    color: bisque;
             }
         }
     }
@@ -151,10 +173,10 @@
     }
 
     > .cutDiv{
-        width: 21px;
+        width: 15px;
         position: absolute;
         height: calc(100% - 15px);
         bottom: 0;
-        background-color: cadetblue;
+        background-color: #00a6fb;
     }
 }

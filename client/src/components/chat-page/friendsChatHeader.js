@@ -9,7 +9,7 @@ const FriendChatHeader = () => {
     return(
         <div>
             <img className="friendPicture" alt="friendProfilePicture"/>
-            <p>{activeUserChatData.name}</p>
+            <p>{activeUserChatData.name} #{activeUserChatData.code}</p>
             <img className="friendOptions" alt="friendOptions"/>
         </div>
     )

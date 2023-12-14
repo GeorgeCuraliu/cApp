@@ -4,7 +4,7 @@ import { Context } from "../context/context";
 
 const FriendCard = (props) => {
 
-    const {setUserChatOpen, setActiveUserChatData, serverChatOpen, setServerChatOpen} = useContext(Context);// props.name----props.data = [userCode, dateOfFriendRequest, chatCode]
+    const {activeUserChatData, setUserChatOpen, setActiveUserChatData, serverChatOpen, setServerChatOpen, userChatOpen} = useContext(Context);// props.name----props.data = [userCode, dateOfFriendRequest, chatCode]
 
     const handleFriendClick= () => {
         setUserChatOpen(true);
@@ -12,8 +12,13 @@ const FriendCard = (props) => {
         if(serverChatOpen){setServerChatOpen(false)}//in case that the server chat is open, it turns it off
     }
 
+    let styleOBJ = {};
+    if(userChatOpen && activeUserChatData.name === props.name){
+        styleOBJ = {backgroundColor: "#5C8374"};
+    }
+
     return(
-        <div className="friendCard" onClick={handleFriendClick}>
+        <div style={styleOBJ} className="friendCard" onClick={handleFriendClick}>
             <img alt="friendProfilePicture" />
             <p>{props.name}</p>
         </div>

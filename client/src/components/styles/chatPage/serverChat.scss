@@ -1,13 +1,12 @@
 .serverChat{
-    background-color:darkolivegreen;
     width: 100%;
     height: 90vh;
 
     .serverMessageContainer{
         flex-grow: 1;
         width: 100%;
-        height: 80vh;
-        background-color: aqua;
+        height: 86vh;
+        background-color: #00a6fb;
         display: flex;
         flex-direction: column;
         position: relative;
@@ -15,13 +14,23 @@
     }
 
     .inputContainer{
-        width: 100%;
-        height: 10vh;
-        background-color: gray;
+        width: calc(100% - 2px);
+        height: calc(7vh - 2px);
+        border: 1px solid black;
+        background-color: bisque;
+        padding-left: 20px;
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+
+        input {
+            height: 3vh;
+            width: 65%;
+        }
 
         .sendButton{
-            width: 40px;
-            height: 10px;
+            width: 3vh;
+            height: 3vh;
             background-color: black;
             cursor: pointer;
         }

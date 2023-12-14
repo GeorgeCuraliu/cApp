@@ -2,12 +2,18 @@
     width: 40%;
     place-self: center;
     aspect-ratio: 1;
-    background-color: black;
 }
 @mixin imgStyle{
     width: 100%;
     align-self: center;
     cursor: pointer;
+}
+
+@mixin hoverImg{
+    animation-name: buttonsHover;
+    animation-direction: normal;
+    animation-duration: 2s;
+    background-color: #33415c;
 }
 
 *, ::after, ::before{
@@ -19,7 +25,7 @@
 .userContainer{
     width: 15vw;
     height: 100vh;
-    background-color: blue;
+    background-color: #002855;
     display: flex;
     flex-direction: column;
 
@@ -45,9 +51,9 @@
     }
 
     > .users {
-        width: 96%;
+        width: 100%;
         flex: 1 0 auto;
-        background-color: aqua;
+        background-color: #023e7d;
         place-self: center;
         display: flex;
         justify-content: flex-start;
@@ -58,17 +64,23 @@
       
         > .friendCard {
           width: 90%;
-          background-color: red;
+          background-color: #b7e4c7;
           display: flex;
           align-items: center;
           flex-direction: row;
           gap: 10px;
           height: 5vh;
+          cursor: pointer;
 
           > img{
             height: 90%;
             aspect-ratio: 1/1;
             background-color: black;
+            border-radius: 100%;
+          }
+
+          > p{
+            overflow-y: hidden;
           }
         }
     }
@@ -91,6 +103,10 @@
             > img{
                 @include imgStyle();
             }
+
+            > img:hover{
+                @include hoverImg();
+            }
         }
 
         > .settingsDiv{
@@ -99,7 +115,20 @@
             > img{
                 @include imgStyle();
             }
+
+            > img:hover{
+                @include hoverImg();
+            }
         }
 
+    }
+}
+
+@keyframes buttonsHover {
+    from{
+        background-color: #002855;
+    }
+    to{
+        background-color: #33415c;
     }
 }

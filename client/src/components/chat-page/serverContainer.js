@@ -27,7 +27,7 @@ const ServerContainer = () => {
         <div className="serverContainer">
             <div className="triggerUserContainerContainer">
                 <div className="triggerUserContainer"></div>
-                <p>Friends</p>
+                <p>Servers</p>
             </div>
             {servers && Object.keys(servers).map(server => {
                     return( <ServerCard name={servers[server]} code={server}/>)
