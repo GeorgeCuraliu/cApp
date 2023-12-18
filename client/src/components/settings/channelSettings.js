@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 
 const ChannelSettings = (props) => {
+    console.log(props);
 
     const [activeCardOptions, setActiveCardOptions] = useState() // will trigger the options for a user card on hover and close them on mouse leave
 
@@ -10,6 +11,8 @@ const ChannelSettings = (props) => {
     }
 
     const handleUserAccesibility = (code, name) => {
+        console.log("chnage user accessibility");
+        console.log(props.activeChannel.channelName, code, name);
         axios.post("http://localhost:3009/changeUserAccesiblityChannel", {serverCode : props.activeServer, channel: props.activeChannel.channelName, user: [code, name]})
             .then(response => {
                 console.log(response)

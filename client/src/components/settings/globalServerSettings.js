@@ -50,14 +50,14 @@ const GlobalSettings = (props) => {
     }
 
 
-    const sendServerJoinRequestResponse = (response, userCode, username) => {//response will be boolean 
-        console.log(`Send response for user ${userCode} with response ${response}`)
-        axios.post("http://localhost:3009/sendServerJoinRequestResponse", {serverCode : props.activeServer, userCode: userCode, response: response})
+    const sendServerJoinRequestResponse = (responseA, userCode, username) => {//response will be boolean 
+        console.log(`Send response for user ${userCode} with response ${responseA}`)
+        axios.post("http://localhost:3009/sendServerJoinRequestResponse", {serverCode : props.activeServer, userCode: userCode, response: responseA})
             .then(response => {
                 console.log(response);
                 let temp = {...globalSettings};
                 delete temp.joinRequests[userCode];
-                if(response){
+                if(responseA){
                     temp.users[userCode] = username;
                 }
                 setGlobalSettings(temp);

@@ -16,6 +16,7 @@ const ServerChatContainer = () => {
     showServerOptions ? triggerButtonStyle= {right: "20vw"} : triggerButtonStyle ={};//will redeclare the width of the element so, it will not get outside
 
     useEffect(() => {//there i should request all the server data
+        console.log("getting server data");
         axios.post("http://localhost:3009/getServerData", {serverCode: activeServerChatData.code, userCode: code})
         .then((response) => {
           console.log(response.data.returnInfo);

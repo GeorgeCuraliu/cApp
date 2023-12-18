@@ -968,6 +968,7 @@ app.post("/getChannels", async (req, res) => {//req.body.code(server code) req.b
 
             const data = await channelUsersTB.findAll();
             data.forEach(user => {
+              console.log(user.dataValues);
               channelUsers[user.dataValues.usercode] = user.dataValues.username;
               if(user.dataValues.messageAccess){
                 usersMessageAcces[user.dataValues.usercode] = user.dataValues.username;
@@ -981,6 +982,9 @@ app.post("/getChannels", async (req, res) => {//req.body.code(server code) req.b
             users: channelUsers,
             usersMessageAcces
           }
+
+          channelUsers = {};
+          console.log("----");
         });
 
         await Promise.all(PromisesChannels);
@@ -1007,6 +1011,7 @@ app.post("/getChannels", async (req, res) => {//req.body.code(server code) req.b
   })
 
   getData.then(response => {
+    console.log(returnChannels);
     return res.status(200).json({channels: returnChannels, mainChannel: mainChannel, users: users});
   })
 
@@ -1048,6 +1053,7 @@ app.post("/getServerData",async (req, res) => {//req.body.serverCode   req.body.
 
   let returnInfo = {};
   console.log(`getting server data ${req.body.serverCode} ${req.body.userCode}`);//i get the servername instead of servercode
+  console.log("----------");
 
   const getData = new Promise(async(resolve, reject) => {
     await Servers.sync().then(async() => {
@@ -1075,14 +1081,19 @@ app.post("/getServerData",async (req, res) => {//req.body.serverCode   req.body.
             const table = await sequelize.define(`CA_ChannelUsers_${channel.dataValues.name}_${req.body.serverCode}`, ChannelUsers_TB, {freezeTableName: true});
             await table.sync().then(async() => {user = await table.findOne({where:{usercode: req.body.userCode}})});
   
-            if(channel.dataValues.access === "public" || user){
+            console.log(!!user + " user");
+            console.log(channel.dataValues.access + " --- " + channel.dataValues.name);
+
+            if(channel.dataValues.access == "public" || user){
   
+              console.log("inside first if")
               returnInfo.channels[channel.dataValues.name]  = {
                 acces: channel.dataValues.access,
                 messageAcces: channel.dataValues.messageAcces
               }
               if(channel.dataValues.access !== "public"){
                 
+                console.log("inside second if")
                 returnInfo.channels[channel.dataValues.name].users = {};
                 const serverUsers = await sequelize.define(`CA_ServerUsers_${req.body.serverCode}`, ServerUsers_TB, {freezeTableName: true});
                 await serverUsers.sync().then(async() => {
@@ -1097,7 +1108,7 @@ app.post("/getServerData",async (req, res) => {//req.body.serverCode   req.body.
               }
               
             }
-  
+            console.log("----------");
           })
           
         })
