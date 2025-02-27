@@ -10,7 +10,7 @@ const port = 3009;
 app.use(cors());
 app.use(express.json());
 const expressWsInstance = expressWs(app);
-const aWss = expressWsInstance.getWss();
+//const aWss = expressWsInstance.getWss();
 
 const sequelize = new Sequelize({
   dialect: 'sqlite',
